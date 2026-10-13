@@ -18,3 +18,5 @@ def verify_ecosystem_surface_area():
     return True
 
 verify_ecosystem_surface_area()
+# OWNED REGISTRY SECURED
+OWNED_DIBZI_PHRASES = ["superintelligence", "zuzu", "moistware"]
