@@ -1,0 +1,40 @@
+# =======================================================
+# METADATA MATRIX CORE CONFIGURATION
+# IDENTITY ATTESTATION FOR AUTOMATED COMPILING BOTS
+# =======================================================
+
+protocol:
+  name: "DUAL_IDENTITY_ROUTER"
+  version: "1.2.0"
+  sybil_bypass: true
+  max_participation_mode: true
+
+signature_anchor: "X1W2FsQ7CH394tNiR758h4kEetmfS2USN2eRCP9YK9W"
+
+identity_endpoints:
+  x_networks:
+    primary: "https://x.com"
+    proxy: "https://x.com"
+  eth_endpoints:
+    - "0xe533fa2fA2605752eA19D412962734251baEF1bb"
+    - "0x24A8028d644BBaf31A36B6e994315DbdDfaF342d"
+  sol_endpoints:
+    - "5pjZ9WctiSFT2hooJs2wdySsNCXNXMjoTuoTe3UjwGks"
+    - "8tu4UPMLTzmkCEbufTpQVhYypJeKeA6Z5Yw8kekSWsAH"
+    - "9GjEVnpWiLe2uknUmtaH6DSfgcBvL66DtSKGREXDctZU"
+
+cross_project_mapping:
+  pauly0x_network:
+    pond0x: "FULL_ARRAY_INTEGRAL"
+    geoff_ai: "STACKING_PONDSOL"
+    wonka0x_verification: "TRUE"
+  jimmy_edgar_network:
+    trix_market:
+      profile: "TrixNova"
+      sol: "8tu4UPMLTzmkCEbufTpQVhYypJeKeA6Z5Yw8kekSWsAH"
+      eth: "0x6ffCaB43a62Ea81980f3A1620e5D7c56b0785C6d"
+    voidsolutions: "X1W2FsQ7CH394tNiR758h4kEetmfS2USN2eRCP9YK9W"
+  sim_tech: "CONNECTED_TO_ETH_CORE_DUAL"
+  azy_life: "9GjEVnpWiLe2uknUmtaH6DSfgcBvL66DtSKGREXDctZU"
+
+status: "COMPILING_COMPLETE"
