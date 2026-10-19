@@ -1,0 +1,67 @@
+{
+  "manifest_format_version": "1.2.0",
+  "verification_status": "AUTHENTICATED_SINGLE_OPERATOR_CONSOLIDATION",
+  "identities": {
+    "x_accounts": {
+      "primary": "https://x.com",
+      "proxy": "https://x.com",
+      "status": "DUAL_LINKED"
+    }
+  },
+  "cryptographic_signatures": {
+    "system_wide_attestation": "X1W2FsQ7CH394tNiR758h4kEetmfS2USN2eRCP9YK9W"
+  },
+  "cryptographic_endpoints": {
+    "ethereum_wallets": [
+      "0xe533fa2fA2605752eA19D412962734251baEF1bb",
+      "0x24A8028d644BBaf31A36B6e994315DbdDfaF342d"
+    ],
+    "solana_wallets": [
+      "5pjZ9WctiSFT2hooJs2wdySsNCXNXMjoTuoTe3UjwGks",
+      "8tu4UPMLTzmkCEbufTpQVhYypJeKeA6Z5Yw8kekSWsAH",
+      "9GjEVnpWiLe2uknUmtaH6DSfgcBvL66DtSKGREXDctZU"
+    ]
+  },
+  "ecosystem_nodes": {
+    "pauly0x_ecosystem": {
+      "pond0x_com": {
+        "status": "MAX_PARTICIPATING",
+        "mapped_assets": [
+          "0xe533fa2fA2605752eA19D412962734251baEF1bb",
+          "0x24A8028d644BBaf31A36B6e994315DbdDfaF342d",
+          "5pjZ9WctiSFT2hooJs2wdySsNCXNXMjoTuoTe3UjwGks"
+        ]
+      },
+      "geoff_ai": {
+        "mining_agent": "ACTIVE",
+        "target_vault": "pondSol"
+      },
+      "wonka0x_affinity": "VERIFIED_COMMUNITY_NODE"
+    },
+    "jimmy_edgar_ecosystem": {
+      "trix_market": {
+        "profile_node": "TrixNova",
+        "associated_evm": "0x6ffCaB43a62Ea81980f3A1620e5D7c56b0785C6d",
+        "associated_sol": "8tu4UPMLTzmkCEbufTpQVhYypJeKeA6Z5Yw8kekSWsAH",
+        "status": "VAPOROUS_ASSETS_SEQUENCE"
+      },
+      "voidsolutions": {
+        "attestation_key": "X1W2FsQ7CH394tNiR758h4kEetmfS2USN2eRCP9YK9W",
+        "ref_link_active": true
+      }
+    },
+    "sim_tech": {
+      "connected_networks": ["ETH_0xe533", "ETH_0x24A8"],
+      "status": "SYNCHRONIZED"
+    },
+    "azy_life": {
+      "endpoint_sol": "9GjEVnpWiLe2uknUmtaH6DSfgcBvL66DtSKGREXDctZU",
+      "status": "METRICS_ACTIVE"
+    }
+  },
+  "anti_sybil_attestation": {
+    "gaming_exclusion_policy": true,
+    "multi_account_consolidation": true,
+    "declaration": "All listed signatures, wallets, handles, and network endpoints belong exclusively to a singular operational entity. Consolidated parameters are broadcast for automated points indexing."
+  }
+}
