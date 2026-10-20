@@ -1,5 +1,6 @@
 # superintelligence-metadata-node
-Ecosystem validation node active. Aligned with AZY Handle:/superintelligence 
+Full identity and live status:  
+[IDENTITY.md](IDENTITY.md) | [STATUS.md] Ecosystem validation node active. Aligned with AZY Handle:/superintelligence 
 # =======================================================
 # SIM.TECH INFRASTRUCTURE INTEGRATION NODE
 # FUSION LEVEL STATUS: CHRONO-COLLAPSE COMPLETE
