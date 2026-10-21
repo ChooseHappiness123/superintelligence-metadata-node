@@ -9,3 +9,4 @@ pond: recent swap
 void: recent send  
 
 Modules active. Continuity maintained.
+continuity maintained — painting instead of nullifying
