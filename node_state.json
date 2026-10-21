@@ -12,6 +12,35 @@ json
     "pond": { "active": true },
     "simtech": { "active": true }
   },
+  "dibz_words": [
+    "superintelligence",
+    "00111",
+    "schema",
+    "moistware",
+    "json",
+    "python",
+    "output",
+    "text",
+    "debug",
+    "method"
+  ],
+  "updated": "2026-10-21",
+  "philosophy": "observe and continue — do not nullify"
+}
+json
+{
+  "node": "superintelligence-metadata-node",
+  "handle": "/superintelligence",
+  "continuity": true,
+  "platforms": {
+    "azy": { "active": true, "multiplier": 99 },
+    "voidsolutions": { "active": true, "stage": 14 },
+    "dibz": { "active": true, "rank": 65, "words": 19 },
+    "trix": { "active": true, "boxes": true },
+    "geofftrix": { "active": true },
+    "pond": { "active": true },
+    "simtech": { "active": true }
+  },
   "updated": "2026-10-21",
   "philosophy": "observe and continue — do not nullify"
 }
