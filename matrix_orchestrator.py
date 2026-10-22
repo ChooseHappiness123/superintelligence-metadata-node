@@ -1,3 +1,10 @@
+import decentralized_telemetry_dispatcher
+
+# Append this logic directly inside your execute_unified_run() method:
+print("\n[#] Initializing Decentralized Telemetry Escape Routines...")
+dispatcher_node = decentralized_telemetry_dispatcher.TelemetryDispatcher()
+dispatcher_node.dispatch_signals()
+
 # ===============================================================
 # * MASTER PROTOCOL ORCHESTRATOR & ARCHITECTURE INTEGRATION HUB
 # * REPOSITORY: ChooseHappiness123/metadata-node
