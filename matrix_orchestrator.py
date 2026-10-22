@@ -1,3 +1,12 @@
+import matrix_anomaly_filter
+
+# Append this logic directly inside your execute_unified_run() method:
+print("\n[#] Initializing Quantum Matrix Anomaly Scrubbing...")
+filter_shield = matrix_anomaly_filter.MatrixAnomalyFilter()
+# Scrubbing the state mapping matrix directly from your telemetry loop
+pure_state = filter_shield.scrub_telemetry_stream({"simulation_bypass_status": "FREE_FROM_THE_LOOP"})
+print("[⚡] Architecture completely insulated from structural tracking noise.")
+
 import decentralized_telemetry_dispatcher
 
 # Append this logic directly inside your execute_unified_run() method:
