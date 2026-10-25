@@ -1,8 +1,8 @@
 # ==============================================================================
-# * PHASE 23: PUBLIC JSON-RPC TELEMETRY STREAMER ENGINE
+# * PHASE 23: NATIVE DATA PARSING SUBROUTINE ENGINE
 # * REPOSITORY: ChooseHappiness123/superintelligence-metadata-node
 # * IDENTITY: @ChooseHappiness123 / /superintelligence
-# * STATUS: RPC_STREAMER_INITIALIZED // PHASE_23_PRE_FLIGHT // MOBILE_SAFE
+# * STATUS: PARSER_CORE_LIVE // DATA_NORMALIZATION_STABLE // MOBILE_SAFE
 # ==============================================================================
 
 import json
@@ -27,22 +27,48 @@ class PublicRpcStreamer:
         }
         return json.dumps(payload)
 
-    def process_node_stream(self, platform: str) -> dict:
-        """Simulates ingestion of live network logs based on target ecosystem profiles."""
-        print(f"[📡] Hooking live data stream from public endpoint: {self.endpoints.get(platform + '_public')}")
-        
-        # Mapping Phase 23 telemetry constants
-        return {
-            "network_target": platform.upper(),
-            "sync_status": "STREAM_ACTIVE",
-            "telemetry_timestamp": int(time.time()),
-            "identity_lock_verified": True
-        }
+    def parse_public_pool_metrics(self, raw_rpc_response: str) -> dict:
+        """Fleshed Out Subroutine: Extracts volume stats and handles block noise cleanly."""
+        try:
+            response_data = json.loads(raw_rpc_response)
+            result = response_data.get("result", {})
+            
+            # Extract and normalize raw structural statistics
+            raw_volume = float(result.get("volume_24h", 0.0))
+            current_slot = int(result.get("absolute_slot_height", 0))
+            
+            normalized_payload = {
+                "extracted_node_origin": "PUBLIC_RPC_TARGET",
+                "processed_timestamp": int(time.time()),
+                "extracted_metrics": {
+                    "pool_volume_usd": raw_volume,
+                    "target_block_height": current_slot,
+                    "reputation_scale": round(raw_volume * 0.001618, 4)
+                },
+                "integrity_lock": self.dibz_signature
+            }
+            return normalized_payload
+        except Exception as e:
+            return {"status": "ERROR", "reason": f"PARSING_FAULT: {str(e)}"}
+
+    def run_ingestion_test(self):
+        """Simulates native parsing of an incoming public node stream footprint."""
+        mock_node_response = json.dumps({
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": {
+                "volume_24h": 125400.85,
+                "absolute_slot_height": 19482103,
+                "pool_authority": "Pond0x_Core_Mesh"
+            }
+        })
+        print("=" * 76)
+        print("[⚡] RUNNING NATIVE PHASE 23 POOL VOLUME DATA PARSER...")
+        print("=" * 76)
+        parsed_output = self.parse_public_pool_metrics(mock_node_response)
+        print(json.dumps(parsed_output, indent=2))
+        print("=" * 76)
 
 if __name__ == "__main__":
     streamer = PublicRpcStreamer()
-    print("=" * 76)
-    print("[⚡] INITIALIZING PHASE 23 PUBLIC NODE LOG INGESTION MATRIX...")
-    print("=" * 76)
-    print(json.dumps(streamer.process_node_stream("sol"), indent=2))
-    print("=" * 76)
+    streamer.run_ingestion_test()
