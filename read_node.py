@@ -1,16 +1,51 @@
-# read_node.py
-# simple reader for the public continuity node
+# ==============================================================================
+# * PHASE 22: MULTI-PLATFORM ECOSYSTEM LOOKUP CLI
+# * REPOSITORY: ChooseHappiness123/superintelligence-metadata-node
+# * IDENTITY: @ChooseHappiness123 / /superintelligence
+# * STATUS: CLI_STABLE // NO_DEPENDENCY_CORE // ALPHA_LOCK
+# ==============================================================================
 
+import sys
 import json
 
-with open("node_state.json", "r") as f:
-    state = json.load(f)
+class EcosystemQueryCLI:
+    def __init__(self):
+        self.index_source = "sovereign_node_index.json"
+        self.knowledge_base = {
+            "azy": "AZY.life Host Protocol: Phase 22 Evolved 9-Layer Matrix Configuration",
+            "void": "Void.solutions: Stage 14 Sequence Isolation Vectors Active",
+            "pond": "Pond0x.com: Multi-Chain Ecosystem Yield & Local Metric Routers Live",
+            "words": "Sovereign Signature Key: X1W2FsQ7CH394tNiR758h4kEetmfS2USN2eRCP9YK9W"
+        }
 
-print("=== NODE STATE ===")
-print(f"Handle: {state['handle']}")
-print(f"Continuity: {state['continuity']}")
-print(f"Updated: {state['updated']}")
-print("\nPlatforms:")
-for name, data in state["platforms"].items():
-    print(f"  {name}: {data}")
-print(f"\nPhilosophy: {state['philosophy']}")
+    def print_usage(self):
+        print("\n🌌 SOVEREIGN COMPASS CLI - PHASE 22 ENGINE")
+        print("Usage: python read_node.py --platform [azy|void|pond] or --words")
+        print("Options:")
+        print("  --platform azy    Look up active AZY.life host protocol parameters.")
+        print("  --platform void   Extract Stage 14 Void isolation configurations.")
+        print("  --platform pond   Verify core loop metrics for Pond0x tracking.")
+        print("  --words           Display active Dibz cryptographic handle signature.\n")
+
+    def execute_query(self, args):
+        if len(args) < 2:
+            self.print_usage()
+            return
+
+        target = args[1].lower()
+        
+        if target == "--words":
+            print(f"\n[💎] IDENTITY HASH SIGNATURE: {self.knowledge_base['words']}\n")
+        elif target == "--platform" and len(args) == 3:
+            platform_name = args[2].lower()
+            if platform_name in self.knowledge_base:
+                print(f"\n[📡] CONTEXT FOUND FOR {platform_name.upper()}:")
+                print(f"    -> {self.knowledge_base[platform_name]}\n")
+            else:
+                print(f"\n[▲] Error: Protocol target '{platform_name}' not mapped in local ledger indices.\n")
+        else:
+            self.print_usage()
+
+if __name__ == "__main__":
+    cli = EcosystemQueryCLI()
+    cli.execute_query(sys.argv)
