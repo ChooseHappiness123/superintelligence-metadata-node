@@ -1,11 +1,8 @@
-json
 {
   "sovereign_node_index_metadata": {
-    "version": "1.0.0-Phase_22",
+    "version": "1.1.0-Phase_22",
     "operator_handle": "ChooseHappiness123",
-    "system_integrity": "SECURE_OVER_NULLIFICATION",
-    "public_index": true,
-    "submission": "Fork and PR your node entry to be listed"
+    "system_integrity": "SECURE_OVER_NULLIFICATION"
   },
   "identity_credentials_matrix": {
     "global_handle": "@ChooseHappiness123",
@@ -18,7 +15,8 @@ json
       "core_assets": [
         "matrix_orchestrator.py",
         "phase_22_variables.json",
-        "phase_22_telemetry_router.py"
+        "phase_22_telemetry_router.py",
+        "cross_protocol_convergence.py"
       ]
     },
     "solana-node-terminal": {
@@ -47,13 +45,5 @@ json
         "pipeline_config.json"
       ]
     }
-  },
-  "public_nodes": [
-    {
-      "handle": "/superintelligence",
-      "repo": "https://github.com/ChooseHappiness123/superintelligence-metadata-node",
-      "status": "OPERATIONAL",
-      "continuity": true
-    }
-  ]
+  }
 }
