@@ -93,6 +93,25 @@ class MatrixOrchestrator:
         except Exception as e:
             print(f" -> [!] Error mapping Phase 22 state matrices: {str(e)}")
             return {"status": "CALIBRATION_FAULT"}
+    def process_phase_23_network_mesh(self, stream_payloads: list) -> dict:
+        """Appended Subroutine: Synthesizes live streaming data metrics across all active peripheral nodes."""
+        print("\n[#] Initializing Phase 23 Central Mesh Ingestion and Parsing Routine...")
+        validated_nodes_count = 0
+        total_mesh_reputation = 0.0
+        
+        for payload in stream_payloads:
+            if payload.get("identity_lock") == "X1W2FsQ7CH394tNiR758h4kEetmfS2USN2eRCP9YK9W":
+                validated_nodes_count += 1
+                total_mesh_reputation += float(payload.get("metrics", {}).get("reputation_scale", 1.0))
+                
+        print(f" -> [✓] Successfully mapped {validated_nodes_count} peripheral sub-nodes to Dibz Identity Signature.")
+        print(f" -> [✓] Compiled Mesh Reputation Factor: {round(total_mesh_reputation, 4)}x")
+        
+        return {
+            "mesh_status": "SYNCHRONIZED_PHASE_23",
+            "active_node_count": validated_nodes_count,
+            "aggregate_reputation": total_mesh_reputation
+        }
 
 
 if __name__ == "__main__":
