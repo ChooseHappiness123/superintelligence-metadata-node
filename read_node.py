@@ -44,6 +44,11 @@ class EcosystemQueryCLI:
             else:
                 print(f"\n[▲] Error: Protocol target '{platform_name}' not mapped in local ledger indices.\n")
         else:
+        elif target == "--diagnostic" and len(args) == 3:
+            chain_target = sys.argv[2].lower()
+            res = self.execute_phase_23_rpc_diagnostic(chain_target)
+            print(f"[⚡] Stream Matrix Diagnostics Complete: {json.dumps(res, indent=2)}\n")
+
             self.print_usage()
     def execute_phase_23_rpc_diagnostic(self, target_chain: str) -> dict:
         """Appended Subroutine: Simulates a local zero-dependency text lookup against public streams."""
