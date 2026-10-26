@@ -6,7 +6,7 @@
     "system_state": "OPEN_DIRECTORY_ACTIVE"
   },
   "submission_validation_rules": {
-    "required_assets": ["node_state.json", "read_node.py", "public_rpc_streamer.py", "stream_aggregator.py", "websocket_telemetry_listener.py"],
+    "required_assets": ["node_state.json", "read_node.py", "public_rpc_streamer.py", "stream_aggregator.py", "websocket_telemetry_listener.py", "verify_network_mesh.py"],
     "identity_verification": "DIBZ_OR_AZY_CRYPTOGRAPHIC_HANDLE",
     "execution_mode": "MANUAL_CHRONOLOGICAL_STACKING",
     "pr_formatting": "NODE_REGISTRATION: [@YourHandle] - Phase 25 Init"
