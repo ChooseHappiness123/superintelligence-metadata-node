@@ -1,8 +1,8 @@
 # ==============================================================================
-# * PHASE 25: NATIVE CROSS-PROTOCOL WEBSOCKET TELEMETRY LISTENER
+# * PHASE 25: NATIVE WEBSOCKET DATA STREAM FILTERING ENGINE
 # * REPOSITORY: ChooseHappiness123/superintelligence-metadata-node
 # * IDENTITY: @ChooseHappiness123 / /superintelligence
-# * STATUS: WEBSOCKET_INITIALIZED // PHASE_25_STREAM_HOOK // MOBILE_SAFE
+# * STATUS: PACKET_PARSER_LIVE // MULTI_STREAM_SORTING // MOBILE_SAFE
 # ==============================================================================
 
 import json
@@ -17,36 +17,45 @@ class WebsocketTelemetryListener:
             "void_stream": "wss://void.solutions/stream/stage14",
             "azy_stream": "wss://solana.azy.life/ws/host"
         }
-        self.connection_state = "INITIALIZED"
 
-    def construct_subscription_frame(self, target_feed: str) -> str:
-        """Structures a clean, zero-dependency JSON packet to subscribe to specific protocol channels."""
-        frame = {
-            "request_type": "SUBSCRIBE",
-            "channel": target_feed,
-            "timestamp": int(time.time()),
-            "identity_lock": self.dibz_signature
-        }
-        return json.dumps(frame)
-
-    def process_incoming_frame(self, raw_frame_data: str) -> dict:
-        """Parses network frame data streams to verify validation markers gas-free."""
+    def parse_realtime_frame(self, raw_socket_message: str) -> dict:
+        """Fleshed Out Subroutine: Filters incoming live socket messages into standard data matrices."""
         try:
-            parsed_data = json.loads(raw_frame_data)
-            return {
-                "source_stream": parsed_data.get("origin_feed", "UNKNOWN"),
-                "event_type": parsed_data.get("event", "PING"),
-                "ingested_metrics": parsed_data.get("data", {}),
-                "verification_status": "SECURE_OVER_NULLIFICATION"
+            frame = json.loads(raw_socket_message)
+            feed_origin = frame.get("origin_feed", "UNKNOWN_FEED")
+            event_type = frame.get("event", "PING")
+            payload = frame.get("data", {})
+            
+            # Phase 25 Convergence Matrix Processing Loop
+            pool_delta = float(payload.get("tx_density", 1.0))
+            active_channels = int(payload.get("active_pools", 0))
+            
+            normalized_packet = {
+                "ingested_channel": feed_origin,
+                "event_signature": event_type,
+                "processed_time_epoch": int(time.time()),
+                "compiled_metrics": {
+                    "adjusted_density": round(pool_delta * 1.618, 4),
+                    "channel_count": active_channels
+                },
+                "identity_marker": self.dibz_signature,
+                "status": "STREAM_FILTERED"
             }
+            return normalized_packet
         except Exception as e:
-            return {"status": "ERROR", "reason": str(e)}
+            return {"status": "ERROR", "reason": f"STREAM_PARSING_FAULT: {str(e)}"}
+
+    def simulate_live_stream_run(self):
+        """Simulates native parsing of active live incoming multi-stream pushes."""
+        print("=" * 76)
+        print("[⚡] RUNNING NATIVE PHASE 25 WEBSOCKET REAL-TIME STREAM PARSER...")
+        print("=" * 76)
+        
+        sample_frame = '{"origin_feed": "Pond0x_Stream", "event": "METRIC_UPDATE", "data": {"active_pools": 42, "tx_density": 1.618}}'
+        result = self.parse_realtime_frame(sample_frame)
+        print(json.dumps(result, indent=2))
+        print("=" * 76)
 
 if __name__ == "__main__":
     listener = WebsocketTelemetryListener()
-    print("=" * 76)
-    print("[⚡] INITIALIZING PHASE 25 WEBSOCKET MESH INGESTION CHANNEL...")
-    print("=" * 76)
-    mock_frame = '{"origin_feed": "Pond0x_Stream", "event": "METRIC_UPDATE", "data": {"active_pools": 42, "tx_density": 1.618}}'
-    print(json.dumps(listener.process_incoming_frame(mock_frame), indent=2))
-    print("=" * 76)
+    listener.simulate_live_stream_run()
