@@ -1,13 +1,63 @@
 {
   "node_state": {
+    "node": "toostrange0x-sovereign-node",
     "handle": "@toostrange0x",
+    "continuity": true,
     "dibz_signature": "toostrange0x",
     "phase_lock": 22,
     "networks": [
       "Pond0x",
       "Void.solutions",
       "Sim.tech",
-      "AZY.life"
-    ]
+      "AZY.life",
+      "Trix.market",
+      "Dibzi.ai"
+    ],
+    "platforms": {
+      "azy": {
+        "active": true,
+        "handle": "@toostrange0x",
+        "verified": true,
+        "multiplier": 1945,
+        "level": 306
+      },
+      "voidsolutions": {
+        "active": true,
+        "stage": 14,
+        "standing": "RESURRECTED",
+        "badge": "BLOB MAXI"
+      },
+      "dibz": {
+        "active": true,
+        "anchor": "toostrange0x",
+        "rank": 73,
+        "words": 9
+      },
+      "trix": {
+        "active": true,
+        "handle": "toostrange0x",
+        "verified": true,
+        "boxes": 23,
+        "box_rank": 64
+      },
+      "geofftrix": {
+        "status": "UNVERIFIED"
+      },
+      "pond": {
+        "active": true,
+        "standing": "OG_MINER",
+        "historical_participation": true
+      },
+      "simtech": {
+        "historical_participant": true,
+        "current_holdings": 0,
+        "status": "FULLY_VOIDED"
+      }
+    },
+    "dibz_words": [
+      "toostrange0x"
+    ],
+    "updated": "2026-10-28",
+    "philosophy": "sovereign continuity over nullification"
   }
 }
