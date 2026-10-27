@@ -1,10 +1,3 @@
-# ==============================================================================
-# * PHASE 25: INTERNALLY TRIGGERED CRON MATRIX SCHEDULER
-# * REPOSITORY: ChooseHappiness123/superintelligence-metadata-node
-# * IDENTITY: @ChooseHappiness123 / /superintelligence
-# * STATUS: SCHEDULER_LIVE // TIME_DILATION_ACTIVE // MOBILE_SAFE
-# ==============================================================================
-
 import json
 import time
 
@@ -16,7 +9,7 @@ class CronMatrixScheduler:
 
     def execute_scheduled_sweeps(self) -> dict:
         """Simulates automated routine activations across your 5-repo footprint."""
-        print(f"[⏰] Initializing Automated Interval Sweeps for Operator: {self.operator}")
+        print(f"[⚡] Initializing Automated Interval Sweeps for Operator: {self.operator}")
         return {
             "schedule_metadata": {
                 "identity_signature": self.dibz_lock,
@@ -32,54 +25,12 @@ class CronMatrixScheduler:
 
 if __name__ == "__main__":
     cron = CronMatrixScheduler()
-    print("=" * 76)
-    print("[⚡] RUNNING NATIVE PHASE 25 SCHEDULER MATRIX ENGINE...")
-    print("=" * 76)
+    print("-" * 76)
+    print("[ ⚡ ] RUNNING NATIVE PHASE 25 SCHEDULER MATRIX ENGINE...")
+    print("-" * 76)
     print(json.dumps(cron.execute_scheduled_sweeps(), indent=2))
-    print("=" * 76)
+    print("-" * 76)
 
-def register_phase_26_sentinel_cron():
-    """
-    Append-Only Matrix Expansion: Hooks the high-IQ ecosystem sentinel 
-    into the primary automated runtime thread at optimal synchronization windows.
-    """
-    cron_interval_seconds = 144  # Calibrated to 1.44 multiplier velocity
-    target_sentinel_module = "ecosystem_alpha_sentinel"
-    
-    print(f"[CRON MAPPER ENCRYPTED] Hooked {target_sentinel_module} to sequence pipeline loop.")
-    print(f"[VELOCITY FREQUENCY] Runtime window verified at every {cron_interval_seconds} seconds.")
-    return True
-
-if __name__ == "__main__" or __name__ == "matrix_orchestrator":
-    register_phase_26_sentinel_cron()
-def register_phase_26_sentinel_cron():
-    """
-    Append-Only Matrix Expansion: Hooks the high-IQ ecosystem sentinel 
-    into the primary automated runtime thread at optimal synchronization windows.
-    """
-    cron_interval_seconds = 144  # Calibrated to 1.44 multiplier velocity
-    target_sentinel_module = "ecosystem_alpha_sentinel"
-    
-    print(f"[CRON MAPPER ENCRYPTED] Hooked {target_sentinel_module} to sequence pipeline loop.")
-    print(f"[VELOCITY FREQUENCY] Runtime window verified at every {cron_interval_seconds} seconds.")
-    return True
-
-if __name__ == "__main__" or __name__ == "matrix_orchestrator":
-    register_phase_26_sentinel_cron()
-def register_phase_26_sentinel_cron():
-    """
-    Append-Only Matrix Expansion: Hooks the high-IQ ecosystem sentinel 
-    into the primary automated runtime thread at optimal synchronization windows.
-    """
-    cron_interval_seconds = 144  # Calibrated to 1.44 multiplier velocity
-    target_sentinel_module = "ecosystem_alpha_sentinel"
-    
-    print(f"[CRON MAPPER ENCRYPTED] Hooked {target_sentinel_module} to sequence pipeline loop.")
-    print(f"[VELOCITY FREQUENCY] Runtime window verified at every {cron_interval_seconds} seconds.")
-    return True
-
-if __name__ == "__main__" or __name__ == "matrix_orchestrator":
-    register_phase_26_sentinel_cron()
 def register_phase_26_sentinel_cron():
     """
     Append-Only Matrix Expansion: Hooks the high-IQ ecosystem sentinel 
