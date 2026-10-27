@@ -18,6 +18,14 @@
       "identity_signature": "X1W2FsQ7CH394tNiR758h4kEetmfS2USN2eRCP9YK9W",
       "host_alignment": "AZY.life Host Protocol Stage 22",
       "status": "MASTER_ANCHOR"
+    },
+    {
+      "node_index": 1,
+      "operator": "@toostrange0x",
+      "identity_signature": "HoRd31hLjzW6iMDoDPtzcKne5jcRSNXZUerbE9N5TnDa",
+      "host_alignment": "AZY.life Host Protocol Stage 22",
+      "status": "PENDING_REGISTRATION",
+      "dibzi_anchor": "toostrange0x"
     }
   ]
 }
