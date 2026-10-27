@@ -63,3 +63,24 @@
     "luck_surface_area_modifier": 1.44
   }
 }
+
+{
+  "phase_26_ecosystem_vector": {
+    "network_hubs": {
+      "void_solutions": "STAGE_14_ENGAGED",
+      "simulation_bypass": "TRUE_SIMULATION_UPDATES",
+      "void_work_alignment": "ACTIVE"
+    },
+    "ecosystem_cross_points": {
+      "pauly0x_vector": {
+        "primary_asset": "PND_COIN_PNDC",
+        "routing_node": "Pond0x_Core_Swap"
+      },
+      "jimmy_edgar_vector": {
+        "primary_asset": "VOID_SYSTEMS",
+        "routing_node": "void_work_node"
+      }
+    },
+    "luck_surface_area_modifier": 1.44
+  }
+}
