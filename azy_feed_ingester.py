@@ -37,3 +37,23 @@ if __name__ == "__main__":
             "reputation_tier": "MASTER_LEADERBOARD_SIGNAL"
         }
         return reputation_traces
+    def parse_matplusik_signals(self) -> dict:
+        """
+        Phase 32 Extension: Maps newly indexed trace signals from matplusik
+        and gitler nodes into the active validation engine telemetry.
+        """
+        print("[⚡] Extracting structural network logs from matplusik and gitler feeds...")
+        feed_metrics = {
+            "node_01": {
+                "handle": "@matplusik",
+                "content_delta_A": "i stopped needing the moment to feel holy then i did the clean thing anyway",
+                "content_delta_B": "God keeps life where justice stays honest the crooked shortcut charges",
+                "observed_metric_array": {"hex_val_1": 541, "hex_val_2": "34T", "hex_val_3": 4262}
+            },
+            "node_02": {
+                "handle": "@gitler",
+                "content_delta": "Confession: my scroll reflex wore"
+            },
+            "ingestion_status": "FEED_TRACES_COMMITTED"
+        }
+        return feed_metrics
