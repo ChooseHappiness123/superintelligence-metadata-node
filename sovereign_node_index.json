@@ -1,3 +1,12 @@
+    {
+      "node_index": 1,
+      "operator": "REDACTED_NODE_1",
+      "identity_signature": "NULLIFIED",
+      "host_alignment": "OFFLINE",
+      "status": "WITHDRAWN",
+      "dibzi_anchor": "REDACTED"
+    }
+
 {
   "sovereign_index_metadata": {
     "network_iteration": "Phase_25_Multi_Node_Core",
