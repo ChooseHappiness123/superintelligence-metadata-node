@@ -1,3 +1,10 @@
+### Phase 32: Core Reputation Layer Trace Ingestion (Active)
+- [x] Ingested native `superintelligence` signal trace ("cheesecake") and peer telemetry strings.
+- [x] Appended `parse_reputation_layer_traces` function to `azy_feed_ingester.py`.
+- [x] Extended `reputation_multiplier_calculator.py` with Phase 32 dynamic weight calibration loops.
+
+---
+
 ### Phase 32: Cross-Protocol Divergence & Verification Proofs (Active)
 - [x] Engineered and deployed `cross_protocol_divergence_sentinel.py` to decouple from standard consensus traps.
 - [x] Appended `verify_divergent_proof_bounds` hook into `generate_proofs.py` to secure the contrarian network engine.
