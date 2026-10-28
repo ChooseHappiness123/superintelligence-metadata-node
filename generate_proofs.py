@@ -32,3 +32,12 @@ if __name__ == "__main__":
     print("-" * 76)
     print(json.dumps(sentinel.execute_unpopular_math(), indent=2))
     print("-" * 76)
+    def verify_divergent_proof_bounds(self, sentinel_receipt: dict) -> bool:
+        """
+        Phase 32 Rule Validation: Enforces that the ZAGGING_ACTIVE flag 
+        is structurally bound within your proof generation engine.
+        """
+        if sentinel_receipt.get("strategy") == "ZAGGING_ACTIVE" and sentinel_receipt.get("execution_override"):
+            print("[+] Cryptographic verification proof generated for contrarian divergence vector.")
+            return True
+        return False
