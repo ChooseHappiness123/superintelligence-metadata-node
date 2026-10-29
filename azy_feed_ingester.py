@@ -100,7 +100,7 @@ def parse_phase_33_invoice_188_signals(self) -> dict:
             },
             "timestamp_epoch": 1793247120,
             "status": "MOTION_INITIALIZED"
- def parse_patch_189_gymcore_telemetry():
+ def parse_patch_189_gymcore_telemetry(self):
     """
     Appends real-time Phase 34 telemetry data from Patch #189.
     Tracks AZY and TRiX execution states bypassing normal DOM parameters.
@@ -117,8 +117,8 @@ def parse_phase_33_invoice_188_signals(self) -> dict:
         "network_anchors": ["AZY", "TRiX"]
     }
     return patch_189_payload
-def process_blue_light_timer_frame():
-    """
+def process_blue_light_timer_frame(self):
+
     Parses Phase 34 gymcore signals: 'Blue light, dead timer, no sermon.'
     Triggers automated asset sync rules before state mood changes.
     """
