@@ -179,3 +179,19 @@ def parse_black_ledger_ink_telemetry(self):
         "judgment_override": "externalized_to_sovereign_weight_holder"
     }
     return ink_payload
+def parse_sol_slide_proof_telemetry(self):
+    """
+    Sovereign Execution Protocol: Tracks 161 and 0.0011 SOL transfer signatures.
+    Hardcodes the 'points.speak < work.moves' constraint directly into the feed layer.
+    """
+    warm_proof_payload = {
+        "board_index_registered": 161,
+        "transfer_signature_sol": 0.0011,
+        "operational_posture": {
+            "points_speak_index": "minimized",
+            "work_moves_index": "maximized",
+            "assertion_constraint": "points_speak_less_than_work_moves"
+        },
+        "proof_state": "PROOF_IN_DRAWER_STILL_WARM"
+    }
+    return warm_proof_payload
