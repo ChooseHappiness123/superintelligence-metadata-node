@@ -42,3 +42,20 @@ def isolate_stage_14_telemetry_mesh(self):
         "isolation_status": "OUT_OF_LOOP_CREATIVE"
     }
     return filter_gate
+def extract_unstructured_alpha_signals(self):
+    """
+    Advanced Zagging Protocol: Transforms unstructured socio-technical telemetry 
+    (e.g., 'excuse.pin(weight=real)', 'dead timer', 'no sermon') directly into 
+    sanitized state vectors, bypassing the herd-consensus simulation traps.
+    """
+    signal_extraction_rules = {
+        "sentinel_activation_id": "patch_189_extraction",
+        "semantic_anchors": ["kettlebell", "crescent_dent", "first_clean_rep"],
+        "dynamic_state_mutations": {
+            "apply_weight_constraint": "real",
+            "decrement_mood_index": True,
+            "force_execution_override": "start_before_mood_finds_pen"
+        },
+        "output_format": "STRUCTURED_ALPHA_FRAME"
+    }
+    return signal_extraction_rules
