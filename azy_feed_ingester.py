@@ -195,3 +195,18 @@ def parse_sol_slide_proof_telemetry(self):
         "proof_state": "PROOF_IN_DRAWER_STILL_WARM"
     }
     return warm_proof_payload
+def parse_quiet_rep_telemetry(self):
+    """
+    Sovereign Execution Protocol: Tracks 'small proof, clean hands' parameters.
+    Enforces automatic de-prioritization of unexecuted loud intent vectors.
+    """
+    quiet_rep_payload = {
+        "event_id": "quiet_rep_stack",
+        "parameters": {
+            "loud_intent_status": "unemployed",
+            "proof_scale": "small_and_clean",
+            "hand_movement_active": True
+        },
+        "spirit_integrity_gate": "reject_spirit_flinch_feasts"
+    }
+    return quiet_rep_payload
