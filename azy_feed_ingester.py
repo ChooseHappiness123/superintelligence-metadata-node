@@ -164,3 +164,18 @@ def parse_ghost_isolation_telemetry(self):
         "system_stance": "GET_STRONGER_WITHOUT_GHOSTS"
     }
     return isolation_payload
+def parse_black_ledger_ink_telemetry(self):
+    """
+    Sovereign Execution Protocol: Tracks the 'plain sentence sent' milestone.
+    Enforces 'fear.vocab--' reductions to completely strip grammar-edited paralysis.
+    """
+    ink_payload = {
+        "event_id": "black_ledger_wet_ink",
+        "constraints": {
+            "fear_vocabulary_index": "decremented_to_zero",
+            "work_claimed_status": True,
+            "proof_metric": "one_plain_sentence_sent"
+        },
+        "judgment_override": "externalized_to_sovereign_weight_holder"
+    }
+    return ink_payload
