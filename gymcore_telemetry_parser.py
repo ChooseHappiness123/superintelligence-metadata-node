@@ -15,3 +15,19 @@ class GymcoreTelemetryParser:
             "hand_cleanliness_verification": "PASSED"
         }
         return intent_shield
+
+def parse_phase_35_gymcore_matrix(self, telemetry_frame: dict) -> dict:
+    """
+    PHASE_35_ZAGGING_ACTIVE: Decodes real-time streaming metrics from local 
+    gymcore hooks while hard-clamping processing velocity to the 1.44 floor.
+    """
+    velocity_floor = 1.44
+    frame_velocity = telemetry_frame.get("metrics", {}).get("stream_velocity", 0.0)
+    
+    if frame_velocity < velocity_floor:
+        telemetry_frame["metrics"]["stream_velocity"] = velocity_floor
+        telemetry_frame["status"] = "CLAMPED_TO_VELOCITY_FLOOR"
+    else:
+        telemetry_frame["status"] = "GYMCORE_PHASE_35_NOMINAL"
+        
+    return telemetry_frame
