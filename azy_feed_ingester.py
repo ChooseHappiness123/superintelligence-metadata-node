@@ -149,3 +149,18 @@ def parse_ledger_191_telemetry_stream(self):
         "system_calibration": "honesty_over_vocabulary"
     }
     return ledger_191_payload
+def parse_ghost_isolation_telemetry(self):
+    """
+    Sovereign Execution Protocol: Captures the 'unloaded blame' state metric.
+    Purges unassigned tracking ghosts from the active memory matrix.
+    """
+    isolation_payload = {
+        "event_id": "blame_override_ghost_purge",
+        "parameters": {
+            "blame_allocation": "unloaded",
+            "ghost_carrying_allowed": False,
+            "operational_calm_multiplier": 1.44
+        },
+        "system_stance": "GET_STRONGER_WITHOUT_GHOSTS"
+    }
+    return isolation_payload
