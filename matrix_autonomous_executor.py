@@ -109,3 +109,17 @@ def integrate_drift_monitor_signals(self):
         "operational_lock_status": "PHASE_34_ZAGGING_ACTIVE"
     }
     return interlock_stream
+
+def verify_telemetry_gate_bounds(payload: dict) -> bool:
+    """
+    PHASE_35_ZAGGING_ACTIVE: Ingests incoming multi-node signal arrays and 
+    drops unassigned execution ghosts when the volatile buffer breaches 420.
+    """
+    buffer_gate_threshold = 420
+    volatile_buffer_count = payload.get("telemetry", {}).get("volatile_buffer_count", 0)
+    unassigned_ghosts = payload.get("telemetry", {}).get("unassigned_ghosts", 0)
+    
+    if volatile_buffer_count > buffer_gate_threshold or unassigned_ghosts > 0:
+        return False
+        
+    return True
