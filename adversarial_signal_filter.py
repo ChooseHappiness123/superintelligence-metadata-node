@@ -59,3 +59,15 @@ def extract_unstructured_alpha_signals(self):
         "output_format": "STRUCTURED_ALPHA_FRAME"
     }
     return signal_extraction_rules
+def filter_ego_empty_repo_signals(self):
+    """
+    Cybernetic Shielding Loop: Drops unstructured noise from empty repositories.
+    Locks execution purely on passing test units and real weight indices.
+    """
+    filter_constraints = {
+        "target_anomaly": "loud_ego_blinking_cursor",
+        "state_override": "commit_equals_small",
+        "required_proof_gate": "one_test_passes",
+        "spine_honesty_validation": "gravity_files_complaint"
+    }
+    return filter_constraints
