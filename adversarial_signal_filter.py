@@ -83,3 +83,15 @@ def filter_unassigned_blame_ghosts(self):
         "state_integrity": "CALMER_OUT_OF_LOOP"
     }
     return shield_configuration
+def filter_cleverness_apology_stalls(self):
+    """
+    Cybernetic Isolation Gate: Destros self-cleverness loop dependencies.
+    Locks runtime exclusively on plain, raw executable execution paths.
+    """
+    cleverness_filter = {
+        "intercept_target": "edited_apologies_and_clever_grammar",
+        "bypass_gate_active": True,
+        "trusted_weight_engine": "external_gravity_lock",
+        "execution_state": "CALMER_OUT_OF_LOOP"
+    }
+    return cleverness_filter
