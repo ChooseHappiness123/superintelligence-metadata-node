@@ -129,3 +129,23 @@ def process_blue_light_timer_frame(self):
         "invoice_calibration": "invoice_188_to_patch_189_transition"
     }
     return signal_metrics
+def parse_ledger_191_telemetry_stream(self):
+    """
+    Sovereign Execution Protocol: Logs Receipt #190 and Ledger #191 signals.
+    Enforces 'prophecy-- ; commit=small' state reduction matrices.
+    """
+    ledger_191_payload = {
+        "receipt_190": {
+            "marker": "rubber_mat_crescent",
+            "cost_basis": "one_swing_no_committee",
+            "proof": "bell_moved_sermon_denied"
+        },
+        "ledger_191": {
+            "marker": "chipped_mug_tea_ring",
+            "cost_basis": "say_less_finish_promised_work",
+            "proof": "sweat_signs_witness_sheet",
+            "ego_mutation": "prophecy_decremented_small_commit"
+        },
+        "system_calibration": "honesty_over_vocabulary"
+    }
+    return ledger_191_payload
