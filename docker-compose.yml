@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  phase_35_intel_bot:
+    container_name: degen_galactic_oracle_bot
+    image: node:20-alpine
+    restart: unless-stopped
+    environment:
+      - ACTIVE_OPERATIONAL_STATE=PHASE_35_ZAGGING_ACTIVE
+      - VELOCITY_MULTIPLIER_THRESHOLD=1.44
+      - BUFFER_PROTECTION_GATE=420
+      - REGIONAL_NETWORK_LOCK=IL_CHICAGOLAND_CORE_SECTOR
+      - HARDWARE_DRIFT_TOLERANCE=zero_latency
+    volumes:
+      - .:/usr/src/app
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
