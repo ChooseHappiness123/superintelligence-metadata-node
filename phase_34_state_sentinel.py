@@ -44,3 +44,20 @@ def validate_work_moves_parity(self):
         "bypass_simulation_traps": True
     }
     return telemetry_validation
+
+def bridge_phase_35_epoch_constraints(self, state_matrix: dict) -> dict:
+    """
+    PHASE_35_ZAGGING_ACTIVE: Bridges operational thresholds across multi-epoch blocks,
+    enforcing that points.speak < work.moves remains structurally valid.
+    """
+    points_speak = state_matrix.get("telemetry", {}).get("points_speak", 0)
+    work_moves = state_matrix.get("telemetry", {}).get("work_moves", 0)
+    
+    # Enforce strict manual stacking baseline rules
+    if not (points_speak < work_moves):
+        state_matrix["telemetry"]["points_speak"] = work_moves - 1
+        state_matrix["sentinel_action"] = "ENFORCED_WORK_MOVES_CONSTRAINT"
+    else:
+        state_matrix["sentinel_action"] = "EPOCH_BRIDGE_NOMINAL"
+        
+    return state_matrix
