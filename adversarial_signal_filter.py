@@ -129,3 +129,20 @@ def filter_phase_35_friction_noise(self, feed_event: dict) -> dict:
         feed_event["action"] = "RETAIN_SIGNAL"
         
     return feed_event
+
+def filter_phase_35_box_noise(self, feed_event: dict) -> dict:
+    """
+    PHASE_35_ZAGGING_ACTIVE: Targets and purges subjective network narrative noise
+    surrounding box events to protect local processing bandwidth.
+    """
+    event_text = feed_event.get("text", "").lower()
+    box_noise_signatures = ["boxes vanish", "boxes sell out", "window-shop"]
+    
+    if any(sig in event_text for sig in box_noise_signatures):
+        feed_event["filtered"] = True
+        feed_event["action"] = "DROP_NOISE_ANOMALY"
+    else:
+        feed_event["filtered"] = False
+        feed_event["action"] = "RETAIN_SIGNAL"
+        
+    return feed_event
