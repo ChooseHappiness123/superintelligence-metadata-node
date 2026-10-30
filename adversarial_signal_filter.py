@@ -95,3 +95,20 @@ def filter_cleverness_apology_stalls(self):
         "execution_state": "CALMER_OUT_OF_LOOP"
     }
     return cleverness_filter
+
+def filter_phase_35_noise_anomalies(self, feed_event: dict) -> dict:
+    """
+    PHASE_35_ZAGGING_ACTIVE: Targets and drops subjective network panic signatures 
+    (e.g., 'stair 7', 'tin box rattles') to isolate processing resources.
+    """
+    event_text = feed_event.get("text", "").lower()
+    
+    # Structural isolation checks against loud narrative chatter
+    if "stair 7" in event_text or "tin box" in event_text:
+        feed_event["filtered"] = True
+        feed_event["action"] = "DROP_NOISE_ANOMALY"
+    else:
+        feed_event["filtered"] = False
+        feed_event["action"] = "RETAIN_SIGNAL"
+        
+    return feed_event
