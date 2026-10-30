@@ -1,3 +1,6 @@
+- **Box Event Filtering Deployed:** `adversarial_signal_filter.py` extended to intercept box sales and market narrative chatter.
+- **Sovereign Box Sentinel Instantiated:** Created `azy_box_sentinel.py` to enforce absolute structural closure states on streaming pipeline payloads.
+
 - **Broadcast Routing Matrix Expanded:** Cross-repo mesh pathways hard-coded into `superintelligence-metadata-node/multi_node_broadcast_router.py`.
 - **Offline Integrity Posture Locked:** Zero-latency drift parameters and ghost-blame isolation shields integrated into `superintelligence-metadata-node/offline_integrity_sentinel.py`.
 - **Cross-Phase Operational Bridge Injected:** Multi-epoch validation loops added to `superintelligence-metadata-node/phase_34_state_sentinel.py` to continuously protect the `points.speak < work.moves` rule.
