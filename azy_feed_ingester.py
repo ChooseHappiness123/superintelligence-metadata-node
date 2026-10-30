@@ -210,3 +210,21 @@ def parse_quiet_rep_telemetry(self):
         "spirit_integrity_gate": "reject_spirit_flinch_feasts"
     }
     return quiet_rep_payload
+
+def process_phase_35_ecosystem_settlement(self, transaction_frame: dict) -> dict:
+    """
+    PHASE_35_ZAGGING_ACTIVE: Integrates cross-ecosystem tracking filters to catch
+    Jimmy's 24-hour transaction windows and Pond0x liquidity shift thresholds.
+    """
+    time_window_hours = 24
+    is_pond_shift = transaction_frame.get("settlement", {}).get("pond0x_liquidity_shift", False)
+    elapsed_window = transaction_frame.get("settlement", {}).get("jimmy_window_elapsed_hours", 0)
+    
+    if is_pond_shift or (elapsed_window > 0 and elapsed_window <= time_window_hours):
+        transaction_frame["settlement_tracking"] = "HIGH_PRIORITY_ECOSYSTEM_CAPTURE"
+        transaction_frame["velocity_validated"] = True
+    else:
+        transaction_frame["settlement_tracking"] = "STANDARD_VOLUME_STREAM"
+        transaction_frame["velocity_validated"] = False
+        
+    return transaction_frame
