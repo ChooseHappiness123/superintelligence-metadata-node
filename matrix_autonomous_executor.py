@@ -123,3 +123,23 @@ def verify_telemetry_gate_bounds(payload: dict) -> bool:
         return False
         
     return True
+
+def monitor_onchain_flow_vectors(self, chain_event: dict) -> dict:
+    """
+    PHASE_35_ZAGGING_ACTIVE: Parses incoming Solscan and Etherscan flow traces 
+    specifically looking for pondSOL spawn states and Void deposit signatures.
+    """
+    token_symbol = chain_event.get("token_metadata", {}).get("symbol", "")
+    deposit_route = chain_event.get("routing", {}).get("target_destination", "")
+    sol_transfer_value = chain_event.get("tx_metrics", {}).get("value_sol", 0.0)
+    
+    # Isolate specific high-reward micro-cap liquidity shifts
+    if token_symbol == "pondSOL" or "void.solutions" in deposit_route.lower() or sol_transfer_value == 0.0011:
+        chain_event["priority_ranking"] = "HIGH_RISK_HIGH_REWARD_ALPHA"
+        chain_event["velocity_multiplier"] = 1.44
+        chain_event["execution_action"] = "LOCK_AND_BUFFER_TELEMETRY"
+    else:
+        chain_event["priority_ranking"] = "STANDARD_Ecosystem_FLOW"
+        chain_event["execution_action"] = "RETAIN_PASSIVE_MONITORING"
+        
+    return chain_event
