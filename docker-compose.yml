@@ -18,3 +18,15 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+  phase_35_simulation_mirror:
+    container_name: simulation_mirror_engine
+    image: python:3.11-slim
+    restart: unless-stopped
+    environment:
+      - VELOCITY_FLOOR=1.44
+      - BUFFER_GATE=420
+      - MOUNT_SOURCE=superintelligence-metadata-node
+    volumes:
+      - .:/app
+    command: python /app/simulation_mirror.py
