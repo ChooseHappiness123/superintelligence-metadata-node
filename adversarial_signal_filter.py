@@ -112,3 +112,20 @@ def filter_phase_35_noise_anomalies(self, feed_event: dict) -> dict:
         feed_event["action"] = "RETAIN_SIGNAL"
         
     return feed_event
+
+def filter_phase_35_friction_noise(self, feed_event: dict) -> dict:
+    """
+    PHASE_35_ZAGGING_ACTIVE: Targets and isolates friction-narrative noise 
+    including 'rusted strap', 'sled', 'leaderboard 162', and 'chalk dust' anomalies.
+    """
+    event_text = feed_event.get("text", "").lower()
+    noise_signatures = ["rusted strap", "sled", "162", "chalk dust", "mirror fog"]
+    
+    if any(sig in event_text for sig in noise_signatures):
+        feed_event["filtered"] = True
+        feed_event["action"] = "DROP_NOISE_ANOMALY"
+    else:
+        feed_event["filtered"] = False
+        feed_event["action"] = "RETAIN_SIGNAL"
+        
+    return feed_event
