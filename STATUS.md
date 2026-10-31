@@ -1,3 +1,10 @@
+## [PHASE_36_VERIFICATION_MESH] // 2026-10-31
+- Live timeline + pressure metrics bound directly to Simulation Map front door payload.
+- Master test suite successfully verified against live infrastructure RPC interfaces.
+- Source-linked parameters perfectly aligned between terminal shell wrappers and visual onboarding schemas.
+
+---
+
 - Bound the live public ingester RPC outputs and historical launch-to-collapse timeline metrics directly into simulation_map_onboarding.py as a non-dismissible layout block.
 - Implemented visual threat mapping logic directly linked to available pool depth parameters and the emergency kill-switch state.
 
