@@ -1,3 +1,9 @@
+- **Simulation Map Onboarding Layer Upgraded:** Connected `simulation_map_onboarding.py` directly to the `EcosystemTimelineParser` engine.
+- **Forensic Warning Block Operational:** Forced an un-dismissible, structured JSON block inside the front-door payload containing raw PNDC -> PORK -> wPOND launch-to-collapse sequence trails and explicit chronological trap identifiers.
+- **Dynamic Threat System Implemented:** Integrated visual markers (`CRITICAL_RED_BREACH` // `AMBER_WARNING_ELEVATED`) tracking both active loop detections and pool outflow metrics.
+
+---
+
 - **Ecosystem Chronology Parser Live:** Created `ecosystem_timeline_parser.py` to index sequential launch-to-collapse phases across PNDC, PORK, and wPOND parameters natively.
 - **Cross-Module Interlock Armed:** Dynamic updates map raw timeline outputs back into the `HistoricalPhaseLedger` asset registry automatically.
 - **Testing Assertions Hardened:** Wired `test_phase_35_pipeline.py` to trigger full verification failure limits when post-collapse claim patterns emerge without verified on-chain recovery.
