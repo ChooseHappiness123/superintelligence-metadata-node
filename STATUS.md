@@ -1,3 +1,6 @@
+- Bound the live public ingester RPC outputs and historical launch-to-collapse timeline metrics directly into simulation_map_onboarding.py as a non-dismissible layout block.
+- Implemented visual threat mapping logic directly linked to available pool depth parameters and the emergency kill-switch state.
+
 ## [PHASE_36_BOOTSTRAP_DELTA_SHIPPED] // 2026-10-31
 - **One-Line Command Wrapper Operational:** Configured `run_local_node.sh` to handle direct `--delta` command-line auditing parameters.
 - **Zero-Drift Execution:** Tied terminal output summaries straight into the identical live RPC-backed ledger arrays and timeline loop parsers used by the core test suite.
