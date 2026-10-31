@@ -1,3 +1,10 @@
+## [PHASE_36_BOOTSTRAP_DELTA_SHIPPED] // 2026-10-31
+- **One-Line Command Wrapper Operational:** Configured `run_local_node.sh` to handle direct `--delta` command-line auditing parameters.
+- **Zero-Drift Execution:** Tied terminal output summaries straight into the identical live RPC-backed ledger arrays and timeline loop parsers used by the core test suite.
+- **Sovereign Accessibility:** Empowered operators to instantly pull verified block links, pressure scores, and narrative trap warnings locally via plain-text console logging.
+
+---
+
 ## [PHASE_36_LIVE_RPC_VERIFIED] // 2026-10-31
 - **Live RPC Ingestion Online:** Upgraded `live_public_ingester.py` with functional JSON-RPC HTTP clients querying web infrastructure.
 - **Integration Validation Green:** Overwrote `test_phase_35_pipeline.py` to assert that live metrics, timeline sequences, pressure thresholds, and map threat states parse seamlessly on authentic non-mock layers.
