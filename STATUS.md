@@ -1,3 +1,6 @@
+- **Liquidity Pressure Monitor Active:** Created `liquidity_pressure_monitor.py` to auto-trigger the emergency kill-switch when cumulative outflows challenge current pool depth limits.
+- **Position Reduction Tester Shipped:** Instantiated `position_reduction_tester.py` to allow simulated dry-runs and slippage analysis for sizing portfolio exposure to zero cleanly.
+
 - **Simulation Exit Manifest Shipped:** Created `SIMULATION_EXIT_CHECKLIST.md` to establish un-gatekept structural thresholds and participant risk procedures.
 - **Autonomous Kill-Switch Deployed:** Instantiated `emergency_kill_switch.py` to trigger full isolation shutdown loops within 5 minutes of a vault breach.
 - **Data Harvester Connected:** Created `debridge_data_harvester.py` to couple streaming cross-chain intent frames directly to active risk mitigation parameters.
