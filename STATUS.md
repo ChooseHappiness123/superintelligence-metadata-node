@@ -1,3 +1,6 @@
+- **Plain-Language Event Translator Live:** Created `plain_language_translator.py` to convert raw RPC structures into source-linked, one-sentence explanations for new participants.
+- **Exit Rehearsal Gym Shipped:** Instantiated `exit_rehearsal_gym.py` to establish an on-demand dry-run interface for practicing exposure reduction to zero under live liquidity constraints.
+
 ## [PHASE_36_LIVE_VERIFICATION_ARMED] // 2026-10-31
 - **Live Public Ingester Online:** Created `live_public_ingester.py` to route real block responses from public nodes into transparent verification links.
 - **Master Test Execution Overhauled:** Wired `test_phase_35_pipeline.py` to process active transaction entries, evaluate live pressure ratios, and auto-fill the exit checklist parameters immediately upon trigger conditions.
