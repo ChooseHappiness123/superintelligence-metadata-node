@@ -1,3 +1,10 @@
+## [PHASE_36_FORENSIC_LEDGER_SHIPPED] // 2026-10-31
+- **Historical Ledger Instantiated:** Created `historical_phase_ledger.py` containing a multi-epoch verification tracking database for PNDC, PORK, wPOND, and VOID claims.
+- **Master Assertion Hardened:** Upgraded `test_phase_35_pipeline.py` with continuous honesty index evaluation thresholds that intentionally break compilation loops if narrative deviations cross safety thresholds.
+- **Decoupled Node Surface Posture:** All endpoints locked to verifiable links, defaulting to a programmatic zero-exposure stance.
+
+---
+
 ## [PHASE_36_DECOUPLED_STACK_COMPLETE] // 2026-10-31
 - **One-Command Setup Shipped:** Developed `run_local_node.sh` to empower instant `git clone && docker compose up` decentralization.
 - **Anomaly-Checklist Linker Operational:** Created `anomaly_checklist_linker.py` to convert statistical drift spikes directly into structured markdown decision templates.
