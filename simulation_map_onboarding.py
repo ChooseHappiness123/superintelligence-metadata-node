@@ -13,10 +13,10 @@ class SimulationMapOnboarding:
 
     def compile_live_public_front_door(self, current_pool: dict, recent_outflows: dict, user_allocation: float) -> dict:
         """
-        Pulls from identical live RPC engines and chronological timeline arrays to force
-        an un-dismissible, source-linked verification state directly onto the entry layout.
+        PHASE_36_ZAGGING_ACTIVE: Generates the public-facing verification onboarding matrix.
+        Binds live JSON-RPC block metrics and forensic launch-to-collapse sequence traps side-by-side.
         """
-        # 1. Fetch current on-chain state and audit loop traps
+        # 1. Pull current on-chain state and parse timeline deviations
         eth_rpc_snapshot = self.ingester.fetch_latest_ethereum_block_metrics()
         timeline_report = self.timeline_parser.parse_sequence_and_check_traps()
         pressure_state = self.pressure_monitor.evaluate_pool_pressure(current_pool, recent_outflows)
@@ -24,13 +24,13 @@ class SimulationMapOnboarding:
         pool_depth_usd = current_pool.get("current_pool_depth_usd", 1.0)
         pressure_ratio = pressure_state.get("calculated_pressure_ratio", 0.0)
 
-        # 2. Map direct mathematical threat status based on public flow thresholds
+        # 2. Hardlock system threat indicators directly to public data constraints
         if pressure_ratio >= self.pressure_monitor.critical_pressure_ratio or timeline_report["status"] == "NARRATIVE_TRAP_TRIGGERED":
             active_threat_level = "CRITICAL_RED_BREACH"
         else:
             active_threat_level = "NOMINAL_MONITORING"
 
-        # 3. Formulate the explicit, non-dismissible entry payload
+        # 3. Formulate the explicit, non-dismissible entry schema
         entry_map_schema = {
             "timestamp": time.time(),
             "rpc_backbone_link": eth_rpc_snapshot.get("source_verification_link"),
