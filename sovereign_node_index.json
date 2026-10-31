@@ -21,11 +21,11 @@
     },
     {
       "node_index": 1,
-      "operator": "REDACTED_NODE_1",
-      "identity_signature": "NULLIFIED",
-      "host_alignment": "OFFLINE",
-      "status": "WITHDRAWN",
-      "dibzi_anchor": "REDACTED"
+      "operator": "@toostrange0x",
+      "identity_signature": "HoRd31hLjzW6iMDoDPtzcKne5jcRSNXZUerbE9N5TnDa",
+      "host_alignment": "AZY.life Host Protocol Stage 22",
+      "status": "PENDING_REGISTRATION",
+      "dibzi_anchor": "toostrange0x"
     }
   ],
   "phase_26_calibration": {
