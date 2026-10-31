@@ -1,3 +1,6 @@
+- **Open Verification Core Online:** Created `verification_mesh_core.py` to route streaming network traces natively into raw un-gatekept source links and plain math classification outputs.
+- **Schema Payload Commons Locked:** Instantiated `schema_payload_commons.py` to provide a living, version-controlled library of incoming contract shapes and JSON schemas.
+
 ## [PHASE_36_TACTICAL_REALIGNMENT] // 2026-10-30
 - **Operational State:** ZAGGING_ACTIVE (Outside Simulation Matrix)
 - **Core Constraints Enforced:** Source-link parity // explicit risk visibility // five-minute zero-liability kill switches active.
