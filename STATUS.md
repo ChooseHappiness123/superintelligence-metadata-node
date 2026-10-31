@@ -1,3 +1,10 @@
+## [PHASE_36_DECOUPLED_STACK_COMPLETE] // 2026-10-31
+- **One-Command Setup Shipped:** Developed `run_local_node.sh` to empower instant `git clone && docker compose up` decentralization.
+- **Anomaly-Checklist Linker Operational:** Created `anomaly_checklist_linker.py` to convert statistical drift spikes directly into structured markdown decision templates.
+- **Unified Risk Ingestion Validated:** Integrated the interactive front-door onboarding map, plain-text translators, and user risk passports directly within the master test script execution framework.
+
+---
+
 - **Plain-Language Event Translator Live:** Created `plain_language_translator.py` to convert raw RPC structures into source-linked, one-sentence explanations for new participants.
 - **Exit Rehearsal Gym Shipped:** Instantiated `exit_rehearsal_gym.py` to establish an on-demand dry-run interface for practicing exposure reduction to zero under live liquidity constraints.
 
