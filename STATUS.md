@@ -1,3 +1,10 @@
+## [PHASE_36_LIVE_RPC_VERIFIED] // 2026-10-31
+- **Live RPC Ingestion Online:** Upgraded `live_public_ingester.py` with functional JSON-RPC HTTP clients querying web infrastructure.
+- **Integration Validation Green:** Overwrote `test_phase_35_pipeline.py` to assert that live metrics, timeline sequences, pressure thresholds, and map threat states parse seamlessly on authentic non-mock layers.
+- **Core Security Stance:** Explicitly decoupled from happy-path mocks, hard-clamping threat visibility blocks to source-linked data arrays.
+
+---
+
 ```markdown
 ## [PHASE_36_MASTER_VERIFICATION_GREEN] // 2026-10-31
 - **Master Test Assertions Verified:** Confirmed full auto-trigger conditions, sequence parsing paths, and onboarding threat flags via Python runtime assertions.
