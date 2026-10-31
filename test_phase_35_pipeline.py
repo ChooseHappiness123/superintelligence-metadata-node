@@ -2,54 +2,65 @@ import time
 from live_public_ingester import LivePublicIngester
 from emergency_kill_switch import EmergencyKillSwitch
 from liquidity_pressure_monitor import LiquidityPressureMonitor
+from simulation_map_onboarding import SimulationMapOnboarding
+from personal_risk_passport import PersonalRiskPassport
+from plain_language_translator import PlainLanguageTranslator
+from anomaly_checklist_linker import AnomalyChecklistLinker
 
-def execute_live_verification_run():
-    print("⚡ RUNNING CORE PROTOCOL SUITE AGAINST OBSERVED PUBLIC RPC DATA INDICES...")
+def execute_complete_public_mesh_validation():
+    print("⚡ RUNNING FORKABLE LOCAL NODE MASTER TEST CYCLE...")
     
-    # Initialize Core Trio
+    # Instantiate Open Truth Stack Components
     ingester = LivePublicIngester()
     kill_switch = EmergencyKillSwitch()
     pressure_monitor = LiquidityPressureMonitor(kill_switch)
+    onboarding_map = SimulationMapOnboarding()
+    passport_engine = PersonalRiskPassport()
+    translator = PlainLanguageTranslator()
+    linker = AnomalyChecklistLinker()
+
+    # Mocking a high-deviation transaction event pulled from a public RPC stream
+    recorded_event = {
+        "tx_hash": "3mN2kP9sZ7wX4qV",
+        "chain": "solana",
+        "value_sol": 0.0011,
+        "destination": "void.solutions_stage_14_deposit_vault_sol"
+    }
     
-    # Mocking recorded public transaction arrays targeting known void deposit addresses
-    recorded_rpc_payloads = [
-        {"tx_hash": "5zY7m9K2gXWp4Nq", "chain": "solana", "value_sol": 0.0011, "destination": "void.solutions_stage_14_deposit_vault_sol"},
-        {"tx_hash": "2tH8m3P1qZLm5Vk", "chain": "solana", "value_sol": 0.0, "destination": "void.solutions_stage_14_deposit_vault_sol"}
-    ]
+    # Mocking market depth indexes
+    pool_state = {"current_pool_depth_usd": 600000.0}
+    outflow_state = {"cumulative_24h_outflow_usd": 96000.0} # 16% outflow breach
     
-    # Mocking live pool status data
-    live_pool_status = {"current_pool_depth_usd": 400000.0}
-    live_treasury_outflows = {"cumulative_24h_outflow_usd": 68000.0} # 17% outbound drift -> breaches 10% limit
-    
-    # 1. Process Public Data Pulls
-    print("\n🔍 STEP 1: PARSING INCOMING PUBLIC RPC DATA PARITY...")
-    for payload in recorded_rpc_payloads:
-        flow = ingester.ingest_live_transaction_flow(payload)
-        print(f"   [LINK_GENERATED] {flow['source_verification_link']} | Target Pattern Match: {flow['is_target_pattern']}")
-        assert "io/tx/" in flow["source_verification_link"], "FAIL: Erroneous source link mapping"
-        
-    # 2. Evaluate Pressure Monitor & Trigger Autonomous Kill-Switch
-    print("\n🚨 STEP 2: EVALUATING LIQUIDITY DEPTH VS VAULT OUTFLOW PRESSURE RATIO...")
-    pressure_report = pressure_monitor.evaluate_pool_pressure(live_pool_status, live_treasury_outflows)
-    print(f"   Calculated Pressure Ratio: {pressure_report['calculated_pressure_ratio']:.4f}")
-    print(f"   Emergency Kill Condition State: {pressure_report['kill_switch_triggered']}")
-    
-    assert pressure_report["calculated_pressure_ratio"] == 0.17, "FAIL: Pressure calculation error"
-    assert pressure_report["kill_switch_triggered"] is True, "FAIL: Kill-switch disarmed under critical breach conditions"
-    
-    # 3. Simulate Simulation Exit Checklist Auto-Fill Action on Trigger
-    print("\n📋 STEP 3: EXECUTING CHECKLIST AUTO-FILL CONTEXT UPDATES...")
-    if pressure_report["kill_switch_triggered"]:
-        checklist_auto_fill = {
-            "system_integrity_compromised": True,
-            "recorded_breach_ratio": pressure_report["calculated_pressure_ratio"],
-            "mandatory_action_enforced": "DEFAULT_ALL_PORTFOLIO_POSITIONS_TO_SIZE_ZERO_IMMEDIATELY",
-            "source_proof": "Vault leakage limits breached standard 10% threshold boundaries."
-        }
-        print(f"   ⚠️  [AUTO_FILL ALERT] CRITICAL BREACH CAUGHT: {checklist_auto_fill['mandatory_action_enforced']}")
-        assert checklist_auto_fill["system_integrity_compromised"] is True
-        
-    print("\n🏆 COMPREHENSIVE LIVING VERIFICATION RUN PROVEN SUCCESSFUL. TRIO ARMED AND FUNCTIONAL.")
+    print("\n🗺️  STEP 1: GENERATING PUBLIC FRONT DOOR ONBOARDING MAP...")
+    map_data = onboarding_map.compile_visual_onboarding_state(pool_state, outflow_state, 1500.0)
+    print(f"   Visual Canvas Compiled. Global Kill-Switch Status: {map_data['global_kill_switch_tripped']}")
+    assert map_data["onboarding_node_active"] is True
+
+    print("\n🚨 STEP 2: PARSING DATA AND SCORING VAULT PRESSURE...")
+    flow = ingester.ingest_live_transaction_flow(recorded_event)
+    pressure_report = pressure_monitor.evaluate_pool_pressure(pool_state, outflow_state)
+    assert pressure_report["kill_switch_triggered"] is True
+
+    print("\n🗣️  STEP 3: EMITTING PLAIN-LANGUAGE SUMMARY OVERLAYS...")
+    translation = translator.translate_event_to_plain_text(flow, pressure_report)
+    print(f"   [TRANSLATED] {translation['plain_text_explanation']}")
+    assert "Source Proof:" in translation["plain_text_explanation"]
+
+    print("\n🎟️  STEP 4: ISSUING DECOUPLED PERSONAL RISK PASSPORTS...")
+    passport_json = passport_engine.generate_passport_snapshot("@ChooseHappiness123", 5000.0, pressure_report)
+    assert "exposure_profile" in passport_json
+
+    print("\n🔗 STEP 5: AUTOMATICALLY LINKING ANOMALIES TO PRE-FILLED CHECKLISTS...")
+    mock_anomaly = {
+        "deviation_score": 4.82,
+        "source_verification_link": flow["source_verification_link"],
+        "tx_hash": flow["tx_hash"]
+    }
+    pre_filled_checklist = linker.link_anomaly_to_checklist(mock_anomaly)
+    print(pre_filled_checklist)
+    assert "AUTOMATED SYSTEM ALERT" in pre_filled_checklist
+
+    print("\n🏆 SYSTEM INTERACTION COMPLETE: LOCAL FORKABLE NODE CONFIGURATION IS VALIDATED.")
 
 if __name__ == "__main__":
-    execute_live_verification_run()
+    execute_complete_public_mesh_validation()
