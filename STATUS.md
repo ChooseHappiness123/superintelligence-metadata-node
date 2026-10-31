@@ -1,3 +1,5 @@
+- **Interactive Simulation Map Operational:** Instantiated `simulation_map_onboarding.py` to compile un-gatekept onboarding coordinates, mapping live pool capacities, historical phase deltas, and size-to-zero risk parameters directly.
+
 - **Liquidity Pressure Monitor Active:** Created `liquidity_pressure_monitor.py` to auto-trigger the emergency kill-switch when cumulative outflows challenge current pool depth limits.
 - **Position Reduction Tester Shipped:** Instantiated `position_reduction_tester.py` to allow simulated dry-runs and slippage analysis for sizing portfolio exposure to zero cleanly.
 
