@@ -1,3 +1,7 @@
+- **Schema Diff Archiver Connected:** Created `public_schema_diff_archive.py` to seamlessly parse interface snapshots and update the visual onboarding matrix dynamically.
+- **Personal Risk Passport Shipped:** Instantiated `personal_risk_passport.py` to output inspectable, shareable exposure hashes against pool outflow parameters.
+- **Master Testing Suite Upgraded:** Overwrote `test_phase_35_pipeline.py` to validate both Phase 35 and Phase 36 infrastructure loops concurrently with zero compilation latency.
+
 - **Interactive Simulation Map Operational:** Instantiated `simulation_map_onboarding.py` to compile un-gatekept onboarding coordinates, mapping live pool capacities, historical phase deltas, and size-to-zero risk parameters directly.
 
 - **Liquidity Pressure Monitor Active:** Created `liquidity_pressure_monitor.py` to auto-trigger the emergency kill-switch when cumulative outflows challenge current pool depth limits.
