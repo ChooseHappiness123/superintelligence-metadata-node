@@ -1,3 +1,7 @@
+- **Ecosystem Chronology Parser Live:** Created `ecosystem_timeline_parser.py` to index sequential launch-to-collapse phases across PNDC, PORK, and wPOND parameters natively.
+- **Cross-Module Interlock Armed:** Dynamic updates map raw timeline outputs back into the `HistoricalPhaseLedger` asset registry automatically.
+- **Testing Assertions Hardened:** Wired `test_phase_35_pipeline.py` to trigger full verification failure limits when post-collapse claim patterns emerge without verified on-chain recovery.
+
 ## [PHASE_36_FORENSIC_LEDGER_SHIPPED] // 2026-10-31
 - **Historical Ledger Instantiated:** Created `historical_phase_ledger.py` containing a multi-epoch verification tracking database for PNDC, PORK, wPOND, and VOID claims.
 - **Master Assertion Hardened:** Upgraded `test_phase_35_pipeline.py` with continuous honesty index evaluation thresholds that intentionally break compilation loops if narrative deviations cross safety thresholds.
