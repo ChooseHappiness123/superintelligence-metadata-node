@@ -8,28 +8,29 @@ from counterfactual_exit_simulator import CounterfactualExitSimulator
 from receipt_event_sink import ReceiptEventSink
 
 class SimulationMapOnboarding:
-    def __init__(self, shared_sink_instance: ReceiptEventSink, shared_oracle_instance: HonestyOracle):
+    def __init__(self, shared_sink_instance: ReceiptEventSink, shared_oracle_instance: HonestyOracle, shared_monitor_instance: LiquidityPressureMonitor):
         self.kill_switch = EmergencyKillSwitch()
-        self.pressure_monitor = LiquidityPressureMonitor(self.kill_switch)
         self.timeline_parser = EcosystemTimelineParser()
         self.ingester = LivePublicIngester()
         self.exit_sim = CounterfactualExitSimulator()
         # Bind straight to synchronized shared logic references
         self.sink = shared_sink_instance
         self.oracle = shared_oracle_instance
+        self.pressure_monitor = shared_monitor_instance
 
     def compile_live_public_front_door(self, current_pool: dict, recent_outflows: dict, user_allocation: float) -> dict:
         """
-        PHASE_36_ZAGGING_ACTIVE: Compiles the un-gatekept interactive onboarding map matrix. 
-        Pulls the latest dynamic score snapshot calculated directly from promoted items.
+        PHASE_36_ZAGGING_ACTIVE: Generates public onboarding map coordinates.
+        Sufaces latest pressure ratio, exit conditions, and source links in lockstep.
         """
         eth_rpc_snapshot = self.ingester.fetch_latest_ethereum_block_metrics()
         timeline_report = self.timeline_parser.parse_sequence_and_check_traps()
-        pressure_state = self.pressure_monitor.evaluate_pool_pressure(current_pool, recent_outflows)
         
         promoted_motifs = self.sink.fetch_promoted_records_only()
         
-        # Execute rolling honesty recalculation incorporating the promoted array
+        # Interlock: Feed latest promoted item directly to check for outflow contribution updates
+        latest_promoted = promoted_motifs[-1] if promoted_motifs else None
+        pressure_state = self.pressure_monitor.evaluate_pool_pressure(current_pool, recent_outflows, latest_promoted)
         honesty_report = self.oracle.calculate_rolling_honesty_delta(timeline_report, pressure_state, promoted_motifs)
         
         mock_position = {"total_balance_usd": user_allocation}
@@ -57,9 +58,14 @@ class SimulationMapOnboarding:
             
             "public_honesty_heartbeat": {
                 "rolling_honesty_index_score": honesty_report["rolling_honesty_score_pct"],
-                "system_status_tag": honesty_report["verification_status"],
-                "triggering_source_url": honesty_report["triggering_source_url"],
-                "flagged_anomalies": honesty_report["forensic_justifications"]
+                "system_status_tag": honesty_report["verification_status"]
+            },
+            
+            "live_risk_surface": {
+                "available_liquidity_depth_usd": float(pool_depth_usd),
+                "current_vault_outflow_ratio": float(round(pressure_ratio, 4)),
+                "action_threshold_ceiling": self.pressure_monitor.critical_pressure_ratio,
+                "triggering_source_url": pressure_state.get("triggering_source_url")
             },
             
             "counterfactual_downside_rehearsal": {
@@ -68,14 +74,8 @@ class SimulationMapOnboarding:
                 "recommended_action_posture": downside_report["predictive_action"]
             },
             
-            "live_risk_surface": {
-                "available_liquidity_depth_usd": float(pool_depth_usd),
-                "current_vault_outflow_ratio": float(round(pressure_ratio, 4)),
-                "action_threshold_ceiling": self.pressure_monitor.critical_pressure_ratio
-            },
-            
             "onboarding_choice_paths": {
-                "proceed_with_agency": "I acknowledge the source-linked outflows, verified tokens, and size my exposure to zero-loss limits.",
+                "proceed_with_agency": "I acknowledge the source-linked outflows and size my risk.",
                 "one_click_exit": "Deploy local reduction paths."
             }
         }
