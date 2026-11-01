@@ -1,3 +1,9 @@
+## [PHASE_36_SINK_SCHEMA_LOCKED] // 2026-11-01
+- **Append-Only Writer Operational:** Shipped schema-enforced candidate mapping into `receipt_event_sink.py` without overwriting historical lines.
+- **Isolation Gate Bound:** Downstream processors completely decoupled from raw text vectors; entries stream to map and command interfaces exclusively post-promotion.
+
+---
+
 - Created receipt_event_sink.py to auto-ingest candidate posts containing motif sequences and isolate them until on-chain verification maps them.
 - Connected receipt promotion routines directly to the central timeline events framework, updating the living honesty oracle outputs dynamically.
 
