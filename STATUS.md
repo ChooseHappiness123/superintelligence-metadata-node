@@ -1,3 +1,9 @@
+## [PHASE_36_CLAIM_GRAPH_SHIPPED] // 2026-11-01
+- **Graph Exporter Live:** Created `claim_graph_exporter.py` to allow direct, single-command JSON serialization of verified events and system deltas.
+- **Stale Re-Validator Armed:** Injected re-verification hooks to sweep for links that 404 or alter context, appending isolation metrics directly without rewriting logs.
+
+---
+
 - Integrated adversarial candidate fuzz testing vectors natively inside test_phase_35_pipeline.py.
 - Enforced complete isolation logic assertions verifying that near-miss motif payloads and unresolvable links cause zero state drift or downstream mutation, while confirming true end-to-end promotion functionality for authentic source URLs.
 
