@@ -1,3 +1,6 @@
+- Bound the non-dismissible warning block on the Simulation Map front-door payload exclusively to the PROMOTED array records from receipt_event_sink.py.
+- Enforced complete candidate filtration loops inside test_phase_35_pipeline.py to structurally prevent un-verified noise leakage downstream.
+
 ## [PHASE_36_SINK_SCHEMA_LOCKED] // 2026-11-01
 - **Append-Only Writer Operational:** Shipped schema-enforced candidate mapping into `receipt_event_sink.py` without overwriting historical lines.
 - **Isolation Gate Bound:** Downstream processors completely decoupled from raw text vectors; entries stream to map and command interfaces exclusively post-promotion.
