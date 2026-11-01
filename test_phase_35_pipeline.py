@@ -9,58 +9,60 @@ from receipt_event_sink import ReceiptEventSink
 from honesty_oracle import HonestyOracle
 
 def run_live_endpoint_verification_pass():
-    print("⚡ EXECUTING MASTER SUITE AGAINST VERIFIABLE LIVE WEB INFRASTRUCTURE...")
+    print("⚡ EXECUTING MASTER SUITE AGAINST VERIFIABLE INFRASTRUCTURE...")
     
     ingester = LivePublicIngester()
     kill_switch = EmergencyKillSwitch()
-    pressure_monitor = LiquidityPressureMonitor(kill_switch)
-    ledger = HistoricalPhaseLedger()
-    timeline_parser = EcosystemTimelineParser()
     
     # Initialize shared synchronized modules
+    shared_monitor = LiquidityPressureMonitor(kill_switch)
     shared_sink = ReceiptEventSink()
     shared_oracle = HonestyOracle()
-    onboarding_map = SimulationMapOnboarding(shared_sink, shared_oracle)
+    onboarding_map = SimulationMapOnboarding(shared_sink, shared_oracle, shared_monitor)
 
-    raw_text = "0.0011 SOL sequence active via @gymcore endpoints."
-    mock_url = "https://solscan.io"
     live_pool_status = {"current_pool_depth_usd": 600000.0}
-    live_treasury_outflows = {"cumulative_24h_outflow_usd": 96000.0}
+    live_treasury_outflows = {"cumulative_24h_outflow_usd": 60000.0}  # Base ratio 10%
 
-    # 1. Append candidate motif block
-    shared_sink.append_candidate_event(raw_text, mock_url)
-    
-    # 2. ASSERTION ONE: Score must remain unchanged/isolated when events sit as CANDIDATE
+    # 1. Test Candidate Phase Isolation
+    print("\n✍️  STEP 1: INJECTING UNVERIFIED CANDIDATE...")
+    shared_sink.append_candidate_event("TRiX boxes available", "https://x.com")
     map_state_1 = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
-    score_1 = map_state_1["public_honesty_heartbeat"]["rolling_honesty_index_score"]
-    print(f"   [CANDIDATE STATE] System Honesty Index: {score_1}%")
-    
-    # Run a second pass to prove un-promoted records cause zero drift
-    map_state_baseline = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
-    assert map_state_baseline["public_honesty_heartbeat"]["rolling_honesty_index_score"] == score_1
-    print("🟢 ASSERTION 1 SUCCESS: Honesty index remains isolated from unverified candidates.")
+    ratio_1 = map_state_1["live_risk_surface"]["current_vault_outflow_ratio"]
+    assert ratio_1 == 0.10
+    print(f"   [CANDIDATE] Pressure unchanged at base: {ratio_1}")
 
-    # 3. Fire Promotion Gate Check using a verified transaction signature
-    shared_sink.try_promote(mock_url, "5zY7m9K2gXWp4NqV420VaultSignatures")
+    # 2. Test PROMOTED Non-Outflow Phase
+    print("\n📝 STEP 2: PROMOTING NON-OUTFLOW TRADING SIGNALS...")
+    non_outflow_url = "https://etherscan.io"
+    non_outflow_candidate = shared_sink.append_candidate_event("@itsover0x structural metadata updates", non_outflow_url)
+    shared_sink.try_promote(non_outflow_url, "0x_non_outflow_hash")
     
-    # 4. ASSERTION TWO: Verification score must re-compute instantly post-promotion and emit the source link
     map_state_2 = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
-    score_2 = map_state_2["public_honesty_heartbeat"]["rolling_honesty_index_score"]
-    trigger_link = map_state_2["public_honesty_heartbeat"]["triggering_source_url"]
-    
-    print(f"   [PROMOTED STATE] Re-calculated Honesty Index: {score_2}%")
-    print(f"   [PROMOTED STATE] Triggering Source URL: {trigger_link}")
-    
-    assert score_2 < score_1, "FAIL: Honesty Oracle failed to re-score on promoted motif event"
-    assert trigger_link == mock_url, "FAIL: Oracle failed to pin the triggering transaction proof link"
-    print("🟢 ASSERTION 2 SUCCESS: Honesty Oracle coupled to try_promote success loop natively.")
+    ratio_2 = map_state_2["live_risk_surface"]["current_vault_outflow_ratio"]
+    assert ratio_2 == 0.10
+    print(f"   [PROMOTED NON-OUTFLOW] Pressure remains static at: {ratio_2}")
 
-    # Run standard system assertions
-    timeline_report = timeline_parser.parse_sequence_and_check_traps(ledger)
-    pressure_report = pressure_monitor.evaluate_pool_pressure(live_pool_status, live_treasury_outflows)
-    assert pressure_report["kill_switch_triggered"] is True
+    # 3. Test PROMOTED Outflow/Liquidity Phase
+    print("\n🚨 STEP 3: PROMOTING VERIFIED 0.0011 OUTFLOW PATTERNS...")
+    outflow_url = "https://solscan.io"
+    outflow_candidate = shared_sink.append_candidate_event("0.0011 SOL sequence routed to void deposits", outflow_url)
+    outflow_candidate["magnitude"] = 0.0011  # Incurs dynamic dollar weight addition
     
-    print("\n🏆 COMPREHENSIVE RE-SCORING INTEGRATION COMPLETE. SYSTEM SECURED.")
+    shared_sink.try_promote(outflow_url, "0x_outflow_breach_hash")
+    
+    map_state_3 = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
+    ratio_3 = map_state_3["live_risk_surface"]["current_vault_outflow_ratio"]
+    trigger_source = map_state_3["live_risk_surface"]["triggering_source_url"]
+    kill_tripped = map_state_3["kill_switch_tripped"]
+    
+    print(f"   [PROMOTED OUTFLOW] Updated Pressure Ratio: {ratio_3}")
+    print(f"   [PROMOTED OUTFLOW] Source Link Bound: {trigger_source}")
+    print(f"   [PROMOTED OUTFLOW] Kill-Switch Engaged: {kill_tripped}")
+    
+    assert ratio_3 > ratio_1, "FAIL: Pressure monitor ignored promoted outflow context"
+    assert trigger_source == outflow_url, "FAIL: Faulty source link mapping"
+    assert kill_tripped is True, "FAIL: Kill-switch failed to execute on threshold breach"
+    print("🟢 ASSERTION SUCCESS: Inter-module alignment loop proven stable.")
 
 if __name__ == "__main__":
     run_live_endpoint_verification_pass()
