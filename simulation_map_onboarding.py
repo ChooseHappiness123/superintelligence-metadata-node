@@ -8,30 +8,30 @@ from counterfactual_exit_simulator import CounterfactualExitSimulator
 from receipt_event_sink import ReceiptEventSink
 
 class SimulationMapOnboarding:
-    def __init__(self, shared_sink_instance: ReceiptEventSink):
+    def __init__(self, shared_sink_instance: ReceiptEventSink, shared_oracle_instance: HonestyOracle):
         self.kill_switch = EmergencyKillSwitch()
         self.pressure_monitor = LiquidityPressureMonitor(self.kill_switch)
         self.timeline_parser = EcosystemTimelineParser()
         self.ingester = LivePublicIngester()
-        self.oracle = HonestyOracle()
         self.exit_sim = CounterfactualExitSimulator()
-        # Bind straight to the shared open data registry instance
+        # Bind straight to synchronized shared logic references
         self.sink = shared_sink_instance
+        self.oracle = shared_oracle_instance
 
     def compile_live_public_front_door(self, current_pool: dict, recent_outflows: dict, user_allocation: float) -> dict:
         """
-        PHASE_36_ZAGGING_ACTIVE: Generates public onboarding map coordinates. 
-        Pulls exclusively from PROMOTED event vectors while leaving CANDIDATES hidden.
+        PHASE_36_ZAGGING_ACTIVE: Compiles the un-gatekept interactive onboarding map matrix. 
+        Pulls the latest dynamic score snapshot calculated directly from promoted items.
         """
         eth_rpc_snapshot = self.ingester.fetch_latest_ethereum_block_metrics()
         timeline_report = self.timeline_parser.parse_sequence_and_check_traps()
         pressure_state = self.pressure_monitor.evaluate_pool_pressure(current_pool, recent_outflows)
         
-        # 1. Filter out candidate traffic; load ONLY verified promoted records
         promoted_motifs = self.sink.fetch_promoted_records_only()
         
-        # 2. Extract calculations from backend analytics
-        honesty_report = self.oracle.calculate_rolling_honesty_delta(timeline_report, pressure_state)
+        # Execute rolling honesty recalculation incorporating the promoted array
+        honesty_report = self.oracle.calculate_rolling_honesty_delta(timeline_report, pressure_state, promoted_motifs)
+        
         mock_position = {"total_balance_usd": user_allocation}
         downside_report = self.exit_sim.evaluate_downside_scenarios(mock_position, current_pool, recent_outflows)
         
@@ -43,7 +43,6 @@ class SimulationMapOnboarding:
         else:
             active_threat_level = "NOMINAL_MONITORING"
 
-        # 3. Compile output payload incorporating the non-dismissible promoted list
         return {
             "timestamp": time.time(),
             "rpc_backbone_link": eth_rpc_snapshot.get("source_verification_link"),
@@ -51,15 +50,15 @@ class SimulationMapOnboarding:
             "kill_switch_tripped": pressure_state.get("kill_switch_triggered", False),
             
             "non_dismissible_promoted_motif_layer": {
-                "headline": "🚨 VERIFIED RECEPT-GRADE ECHO TIMELINES",
+                "headline": "🚨 VERIFIED RECEIPT-GRADE ECHO TIMELINES",
                 "total_promoted_count": len(promoted_motifs),
-                # Render verified records containing motif, timestamp, source_url, and onchain_match
                 "promoted_events": promoted_motifs
             },
             
             "public_honesty_heartbeat": {
                 "rolling_honesty_index_score": honesty_report["rolling_honesty_score_pct"],
                 "system_status_tag": honesty_report["verification_status"],
+                "triggering_source_url": honesty_report["triggering_source_url"],
                 "flagged_anomalies": honesty_report["forensic_justifications"]
             },
             
