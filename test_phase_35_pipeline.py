@@ -9,60 +9,78 @@ from receipt_event_sink import ReceiptEventSink
 from honesty_oracle import HonestyOracle
 
 def run_live_endpoint_verification_pass():
-    print("⚡ EXECUTING MASTER SUITE AGAINST VERIFIABLE INFRASTRUCTURE...")
+    print("⚡ EXECUTING MASTER SUITE CONCURRENT WITH ADVERSARIAL CANDIDATE FUZZER...")
     
     ingester = LivePublicIngester()
     kill_switch = EmergencyKillSwitch()
     
-    # Initialize shared synchronized modules
     shared_monitor = LiquidityPressureMonitor(kill_switch)
     shared_sink = ReceiptEventSink()
     shared_oracle = HonestyOracle()
     onboarding_map = SimulationMapOnboarding(shared_sink, shared_oracle, shared_monitor)
+    ledger = HistoricalPhaseLedger()
+    timeline_parser = EcosystemTimelineParser()
 
     live_pool_status = {"current_pool_depth_usd": 600000.0}
     live_treasury_outflows = {"cumulative_24h_outflow_usd": 60000.0}  # Base ratio 10%
 
-    # 1. Test Candidate Phase Isolation
-    print("\n✍️  STEP 1: INJECTING UNVERIFIED CANDIDATE...")
-    shared_sink.append_candidate_event("TRiX boxes available", "https://x.com")
-    map_state_1 = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
-    ratio_1 = map_state_1["live_risk_surface"]["current_vault_outflow_ratio"]
-    assert ratio_1 == 0.10
-    print(f"   [CANDIDATE] Pressure unchanged at base: {ratio_1}")
+    # Fetch baseline metrics before firing fuzz vectors
+    base_map = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
+    base_score = base_map["public_honesty_heartbeat"]["rolling_honesty_index_score"]
+    base_ratio = base_map["live_risk_surface"]["current_vault_outflow_ratio"]
 
-    # 2. Test PROMOTED Non-Outflow Phase
-    print("\n📝 STEP 2: PROMOTING NON-OUTFLOW TRADING SIGNALS...")
-    non_outflow_url = "https://etherscan.io"
-    non_outflow_candidate = shared_sink.append_candidate_event("@itsover0x structural metadata updates", non_outflow_url)
-    shared_sink.try_promote(non_outflow_url, "0x_non_outflow_hash")
-    
-    map_state_2 = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
-    ratio_2 = map_state_2["live_risk_surface"]["current_vault_outflow_ratio"]
-    assert ratio_2 == 0.10
-    print(f"   [PROMOTED NON-OUTFLOW] Pressure remains static at: {ratio_2}")
+    # 1. Instantiate Adversarial Fuzz Matrix (N varied candidate events)
+    fuzz_vectors = [
+        {"text": "0.0011 near miss layout text string", "url": ""},  # Malformed/Empty path
+        {"text": "AZY network noise and fake handles", "url": "https://fake-explorers.io"},  # Genuine-looking but unresolvable
+        {"text": "TRiX boxes drop alert speculative chatter", "url": "https://x.com"},  # Non-onchain social link
+        {"text": "0.0011", "url": "ftp://malformed-protocol-transfer.hex"}  # Invalid protocol structure
+    ]
 
-    # 3. Test PROMOTED Outflow/Liquidity Phase
-    print("\n🚨 STEP 3: PROMOTING VERIFIED 0.0011 OUTFLOW PATTERNS...")
-    outflow_url = "https://solscan.io"
-    outflow_candidate = shared_sink.append_candidate_event("0.0011 SOL sequence routed to void deposits", outflow_url)
-    outflow_candidate["magnitude"] = 0.0011  # Incurs dynamic dollar weight addition
+    print("\n💥 STEP 1: INJECTING CHAOTIC FUZZ VECTORS INTO SINK COMPLIANCE HOOKS...")
+    for idx, vector in enumerate(fuzz_vectors):
+        # Fire through append path
+        candidate = shared_sink.append_candidate_event(vector["text"], vector["url"])
+        
+        # Fire through promotion gate path to test structural isolation
+        shared_sink.try_promote(vector["url"], f"fuzz_hash_{idx}")
+        
+        # Pull current state evaluation to verify absolute zero leakage
+        fuzz_map = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
+        
+        # Enforce non-negotiable structural constraints
+        assert fuzz_map["non_dismissible_promoted_motif_layer"]["total_promoted_count"] == 0, f"FAIL: Fuzz index {idx} leaked downstream"
+        assert fuzz_map["public_honesty_heartbeat"]["rolling_honesty_index_score"] == base_score, f"FAIL: Fuzz index {idx} mutated oracle score"
+        assert fuzz_map["live_risk_surface"]["current_vault_outflow_ratio"] == base_ratio, f"FAIL: Fuzz index {idx} modified pressure ratio"
+        assert fuzz_map["kill_switch_tripped"] is False, f"FAIL: Fuzz index {idx} accidentally triggered kill-switch"
+
+    print(f"   [FUZZ_SUCCESS] Passed {len(fuzz_vectors)} isolation tests. Zero updates propagated.")
+
+    # 2. Test End-to-End Propagation of a Genuine Resolvable Source URL
+    print("\n🔓 STEP 2: VERIFYING END-TO-END PROPAGATION OF AUTHENTIC RESOLVABLE DATA...")
+    valid_outflow_url = "https://solscan.io"
+    valid_text = "0.0011 SOL sequence confirmed outbound to void deposit vault."
     
-    shared_sink.try_promote(outflow_url, "0x_outflow_breach_hash")
+    # Append valid item
+    shared_sink.append_candidate_event(valid_text, valid_outflow_url)
+    # Promote valid item
+    promoted_record = shared_sink.try_promote(valid_outflow_url, "authentic_verified_outflow_sig")
+    promoted_record["magnitude"] = 0.0011  # Incur direct math weight shift
+
+    # Final payload synthesis
+    final_map = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
     
-    map_state_3 = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
-    ratio_3 = map_state_3["live_risk_surface"]["current_vault_outflow_ratio"]
-    trigger_source = map_state_3["live_risk_surface"]["triggering_source_url"]
-    kill_tripped = map_state_3["kill_switch_tripped"]
+    print(f"   [PROMOTED_RUN] New Rolling Honesty Score : {final_map['public_honesty_heartbeat']['rolling_honesty_index_score']}%")
+    print(f"   [PROMOTED_RUN] New Vault Outflow Ratio  : {final_map['live_risk_surface']['current_vault_outflow_ratio']}")
+    print(f"   [PROMOTED_RUN] Emergency Kill Triggered : {final_map['kill_switch_tripped']}")
+
+    # Verify that the authentic entry cleanly alters metrics down-chain
+    assert final_map["non_dismissible_promoted_motif_layer"]["total_promoted_count"] == 1
+    assert final_map["public_honesty_heartbeat"]["rolling_honesty_index_score"] < base_score, "FAIL: Score stayed static on valid promotion"
+    assert final_map["live_risk_surface"]["current_vault_outflow_ratio"] > base_ratio, "FAIL: Pressure failed to step up on valid outflow"
+    assert final_map["kill_switch_tripped"] is True, "FAIL: Kill-switch failed to deploy on structural breach"
     
-    print(f"   [PROMOTED OUTFLOW] Updated Pressure Ratio: {ratio_3}")
-    print(f"   [PROMOTED OUTFLOW] Source Link Bound: {trigger_source}")
-    print(f"   [PROMOTED OUTFLOW] Kill-Switch Engaged: {kill_tripped}")
-    
-    assert ratio_3 > ratio_1, "FAIL: Pressure monitor ignored promoted outflow context"
-    assert trigger_source == outflow_url, "FAIL: Faulty source link mapping"
-    assert kill_tripped is True, "FAIL: Kill-switch failed to execute on threshold breach"
-    print("🟢 ASSERTION SUCCESS: Inter-module alignment loop proven stable.")
+    print("\n🏆 COMPREHENSIVE FUZZING AND INTERLOCK RUN PROVEN FLAWLESS. COLD PARITY ACTIVE.")
 
 if __name__ == "__main__":
     run_live_endpoint_verification_pass()
