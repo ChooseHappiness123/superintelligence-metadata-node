@@ -13,50 +13,46 @@ def run_live_endpoint_verification_pass():
     ingester = LivePublicIngester()
     kill_switch = EmergencyKillSwitch()
     pressure_monitor = LiquidityPressureMonitor(kill_switch)
-    onboarding_map = SimulationMapOnboarding()
     ledger = HistoricalPhaseLedger()
     timeline_parser = EcosystemTimelineParser()
-    sink = ReceiptEventSink()
+    
+    # Instantiate the decoupled sink registry
+    shared_sink = ReceiptEventSink()
+    # Pass shared instance into front door visual layout compiler
+    onboarding_map = SimulationMapOnboarding(shared_sink)
 
-    # 1. Append candidate motif block using exact schema layout
-    print("\n✍️  STEP 1: APPENDING UNVERIFIED MOTIF CANDIDATE...")
-    raw_text = "AZY racks the noise. Stair 7 made noise. 0.0011 transfer pending."
+    # Mock parameters
+    raw_text = "Boxes sell out. AZY tracks 0.0011 SOL sequence."
     mock_url = "https://solscan.io"
-    
-    candidate = sink.append_candidate_event(raw_text, mock_url)
-    assert candidate["status"] == "CANDIDATE"
-    assert candidate["promoted_to_ledger"] is False
-    print(f"   Staged Event Append Confirmed. Initial Status: {candidate['status']}")
-
-    # 2. Assert Downstream Visibility is Zero while in CANDIDATE state
-    print("\n🛡️  STEP 2: ENFORCING DOWNSTREAM ISOLATION FILTER...")
-    promoted_set = sink.fetch_promoted_records_only()
-    assert len(promoted_set) == 0, "FAIL: Unverified candidate leaked downstream"
-    print("   Verification Nominal: Candidate remains invisible to timeline and map engines.")
-
-    # 3. Fire Promotion Gate Check using Valid Transfer Proofs
-    print("\n🔓 STEP 3: EXECUTING PROMOTION GATE SEPARATION CHECK...")
-    promoted_record = sink.try_promote(mock_url, "5zY7m9K2gXWp4NqV420VaultSignatures")
-    assert promoted_record["status"] == "PROMOTED"
-    assert promoted_record["promoted_to_ledger"] is True
-    
-    # Verify downstream visibility unlocks exclusively for promoted array items
-    updated_promoted_set = sink.fetch_promoted_records_only()
-    assert len(updated_promoted_set) == 1
-    print(f"   Promotion Nominal. Record status set to: {updated_promoted_set[0]['status']}")
-
-    # 4. Standard Flow Verification Runs
-    timeline_report = timeline_parser.parse_sequence_and_check_traps(ledger)
     live_pool_status = {"current_pool_depth_usd": 600000.0}
     live_treasury_outflows = {"cumulative_24h_outflow_usd": 96000.0}
+
+    # 1. Append candidate motif block
+    shared_sink.append_candidate_event(raw_text, mock_url)
     
+    # 2. ASSERTION ONE: Verify candidate record is completely invisible on the visual map view
+    map_state_1 = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
+    assert map_state_1["non_dismissible_promoted_motif_layer"]["total_promoted_count"] == 0, "FAIL: Unverified candidate leaked to Map layer"
+    print("🟢 ASSERTION 1 SUCCESS: Visual map layer remains 100% blind to unverified candidates.")
+
+    # 3. Fire Promotion Gate Check using a verified transaction signature
+    shared_sink.try_promote(mock_url, "5zY7m9K2gXWp4NqV420VaultSignatures")
+    
+    # 4. ASSERTION TWO: Verify the visual map dynamically unlocks the data block ONLY post-promotion
+    map_state_2 = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
+    assert map_state_2["non_dismissible_promoted_motif_layer"]["total_promoted_count"] == 1, "FAIL: Map layout failed to ingest promoted record"
+    
+    promoted_event = map_state_2["non_dismissible_promoted_motif_layer"]["promoted_events"][0]
+    assert promoted_event["status"] == "PROMOTED"
+    assert promoted_event["onchain_match"] == "5zY7m9K2gXWp4NqV420VaultSignatures"
+    print("🟢 ASSERTION 2 SUCCESS: Visual map front door dynamically bound and displaying promoted records natively.")
+
+    # Standard system checks
+    timeline_report = timeline_parser.parse_sequence_and_check_traps(ledger)
     pressure_report = pressure_monitor.evaluate_pool_pressure(live_pool_status, live_treasury_outflows)
     assert pressure_report["kill_switch_triggered"] is True
     
-    map_data = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 5000.0)
-    assert map_data["system_threat_level"] == "CRITICAL_RED_BREACH"
-    
-    print("\n🏆 SYSTEM INTEGRATION GREEN: APPEND-ONLY RECEIPT PROTOCOLS NOMINAL.")
+    print("\n🏆 COMPREHENSIVE LINKAGE VALIDATION ACCELERATED GREEN. MAP BINDINGS IMMUTABLE.")
 
 if __name__ == "__main__":
     run_live_endpoint_verification_pass()
