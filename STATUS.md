@@ -1,3 +1,6 @@
+- Integrated adversarial candidate fuzz testing vectors natively inside test_phase_35_pipeline.py.
+- Enforced complete isolation logic assertions verifying that near-miss motif payloads and unresolvable links cause zero state drift or downstream mutation, while confirming true end-to-end promotion functionality for authentic source URLs.
+
 - Interlocked verified outflow-style motif promotions straight into the LiquidityPressureMonitor calculator engine.
 - Hardlocked the master suite validation assertions to ensure pressure ratios mutate exclusively on promoted outflow assets, updating the global kill-switch status and source URLs concurrently.
 
