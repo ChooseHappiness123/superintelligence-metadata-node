@@ -5,27 +5,32 @@ from liquidity_pressure_monitor import LiquidityPressureMonitor
 from emergency_kill_switch import EmergencyKillSwitch
 from honesty_oracle import HonestyOracle
 from counterfactual_exit_simulator import CounterfactualExitSimulator
+from receipt_event_sink import ReceiptEventSink
 
 class SimulationMapOnboarding:
-    def __init__(self):
+    def __init__(self, shared_sink_instance: ReceiptEventSink):
         self.kill_switch = EmergencyKillSwitch()
         self.pressure_monitor = LiquidityPressureMonitor(self.kill_switch)
         self.timeline_parser = EcosystemTimelineParser()
         self.ingester = LivePublicIngester()
         self.oracle = HonestyOracle()
         self.exit_sim = CounterfactualExitSimulator()
+        # Bind straight to the shared open data registry instance
+        self.sink = shared_sink_instance
 
     def compile_live_public_front_door(self, current_pool: dict, recent_outflows: dict, user_allocation: float) -> dict:
         """
-        PHASE_36_ZAGGING_ACTIVE: Generates the public-facing verification onboarding matrix.
-        Forces the self-auditing honesty score and predictive exit slippage parameters into the payload.
+        PHASE_36_ZAGGING_ACTIVE: Generates public onboarding map coordinates. 
+        Pulls exclusively from PROMOTED event vectors while leaving CANDIDATES hidden.
         """
-        # 1. Pull core telemetry signals and compile status checks
         eth_rpc_snapshot = self.ingester.fetch_latest_ethereum_block_metrics()
         timeline_report = self.timeline_parser.parse_sequence_and_check_traps()
         pressure_state = self.pressure_monitor.evaluate_pool_pressure(current_pool, recent_outflows)
         
-        # 2. Compute dynamic honesty metrics and downside exit scenarios
+        # 1. Filter out candidate traffic; load ONLY verified promoted records
+        promoted_motifs = self.sink.fetch_promoted_records_only()
+        
+        # 2. Extract calculations from backend analytics
         honesty_report = self.oracle.calculate_rolling_honesty_delta(timeline_report, pressure_state)
         mock_position = {"total_balance_usd": user_allocation}
         downside_report = self.exit_sim.evaluate_downside_scenarios(mock_position, current_pool, recent_outflows)
@@ -38,12 +43,19 @@ class SimulationMapOnboarding:
         else:
             active_threat_level = "NOMINAL_MONITORING"
 
-        # 3. Compile un-dismissible truth layer schema
+        # 3. Compile output payload incorporating the non-dismissible promoted list
         return {
             "timestamp": time.time(),
             "rpc_backbone_link": eth_rpc_snapshot.get("source_verification_link"),
             "system_threat_level": active_threat_level,
             "kill_switch_tripped": pressure_state.get("kill_switch_triggered", False),
+            
+            "non_dismissible_promoted_motif_layer": {
+                "headline": "🚨 VERIFIED RECEPT-GRADE ECHO TIMELINES",
+                "total_promoted_count": len(promoted_motifs),
+                # Render verified records containing motif, timestamp, source_url, and onchain_match
+                "promoted_events": promoted_motifs
+            },
             
             "public_honesty_heartbeat": {
                 "rolling_honesty_index_score": honesty_report["rolling_honesty_score_pct"],
@@ -54,7 +66,6 @@ class SimulationMapOnboarding:
             "counterfactual_downside_rehearsal": {
                 "user_position_value_usd": float(user_allocation),
                 "projected_slippage_pct": downside_report["user_risk_profile"]["estimated_slippage_impact_pct"],
-                "slippage_probability_pct": downside_report["user_risk_profile"]["projected_slippage_probability_pct"],
                 "recommended_action_posture": downside_report["predictive_action"]
             },
             
@@ -65,7 +76,7 @@ class SimulationMapOnboarding:
             },
             
             "onboarding_choice_paths": {
-                "proceed_with_agency": "I verify the raw on-chain facts, accept the rolling honesty score, and choose to participate.",
-                "one_click_exit": "Deploy local reduction paths to zero out exposure."
+                "proceed_with_agency": "I acknowledge the source-linked outflows, verified tokens, and size my exposure to zero-loss limits.",
+                "one_click_exit": "Deploy local reduction paths."
             }
         }
