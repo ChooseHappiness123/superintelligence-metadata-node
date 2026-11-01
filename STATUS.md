@@ -1,3 +1,6 @@
+- Interlocked verified outflow-style motif promotions straight into the LiquidityPressureMonitor calculator engine.
+- Hardlocked the master suite validation assertions to ensure pressure ratios mutate exclusively on promoted outflow assets, updating the global kill-switch status and source URLs concurrently.
+
 - Coupled try_promote execution success directly to HonestyOracle re-scoring loops.
 - Overwrote testing assertions to verify that system scores remain static on candidates and dynamically re-calculate with source transaction URLs exclusively upon promotion.
 
