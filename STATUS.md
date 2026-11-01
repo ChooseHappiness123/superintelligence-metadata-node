@@ -1,3 +1,6 @@
+- Coupled try_promote execution success directly to HonestyOracle re-scoring loops.
+- Overwrote testing assertions to verify that system scores remain static on candidates and dynamically re-calculate with source transaction URLs exclusively upon promotion.
+
 - Bound the non-dismissible warning block on the Simulation Map front-door payload exclusively to the PROMOTED array records from receipt_event_sink.py.
 - Enforced complete candidate filtration loops inside test_phase_35_pipeline.py to structurally prevent un-verified noise leakage downstream.
 
