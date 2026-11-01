@@ -1,3 +1,6 @@
+- Created claim_graph_exporter.py to allow independent third-party verification of the PROMOTED event array metadata.
+- Integrated the --graph command-line parameter flag directly inside run_local_node.sh to export portable, source-linked JSON arrays cleanly.
+
 ## [PHASE_36_CLAIM_GRAPH_SHIPPED] // 2026-11-01
 - **Graph Exporter Live:** Created `claim_graph_exporter.py` to allow direct, single-command JSON serialization of verified events and system deltas.
 - **Stale Re-Validator Armed:** Injected re-verification hooks to sweep for links that 404 or alter context, appending isolation metrics directly without rewriting logs.
