@@ -1,3 +1,7 @@
+- Implemented stale link verification loops inside claim_graph_exporter.py to track original source URL 404 decay.
+- Created personal_threshold_binder.py to map localized risk tolerances against live metrics, auto-triggering kill conditions natively.
+- Overwrote testing assertions to verify that map threat markers and personal risk passports respond instantly to stale failures or threshold breaches.
+
 - Shipped the PROMOTED-only JSON claim-graph serialization module inside claim_graph_exporter.py.
 - Configured run_local_node.sh to intercept the --graph flag parameter, outputting portable, timestamped data files without overwriting history.
 
