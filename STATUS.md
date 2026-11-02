@@ -1,3 +1,6 @@
+- Verified stale promotion revalidation logic, asserting failure receipts surface original source URLs while candidates remain ignored.
+- Created external_receipt_mirror.py to mirror minimal payloads onto independent public gist/paste arrays upon promotion or revalidation updates.
+
 - Implemented stale link verification loops inside claim_graph_exporter.py to track original source URL 404 decay.
 - Created personal_threshold_binder.py to map localized risk tolerances against live metrics, auto-triggering kill conditions natively.
 - Overwrote testing assertions to verify that map threat markers and personal risk passports respond instantly to stale failures or threshold breaches.
