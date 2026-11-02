@@ -9,7 +9,8 @@ class ClaimGraphExporter:
 
     def export_portable_claim_graph_json(self) -> str:
         """
-        Dumps the append-only PROMOTED store into a clean, third-party verifiable JSON structure.
+        Dumps the append-only PROMOTED store into a clean, third-party verifiable JSON structure,
+        surfacing revalidation failures alongside their original source URLs.
         """
         promoted_records = self.sink.fetch_promoted_records_only()
         graph_nodes = []
@@ -44,8 +45,8 @@ class ClaimGraphExporter:
 
     def execute_stale_promotion_revalidation(self, targeted_broken_url: str = None) -> dict:
         """
-        Periodic pass over existing PROMOTED events that re-checks the original source_url.
-        Appends a revalidation_failed receipt cleanly to keep historical promotions honest.
+        Periodic or on-demand pass over existing PROMOTED events that re-checks the original source_url.
+        Appends a revalidation_failed receipt flag cleanly to keep historical promotions honest.
         """
         promoted_records = self.sink.fetch_promoted_records_only()
         audit_report = {
@@ -56,7 +57,6 @@ class ClaimGraphExporter:
         }
 
         for record in promoted_records:
-            # Check for simulated network 404, tx reversals, or material liquidity drops
             if targeted_broken_url and record.get("source_url") == targeted_broken_url:
                 record["revalidation_failed_receipt"] = True
                 record["status"] = "REVALIDATION_FAILED_STALE"
