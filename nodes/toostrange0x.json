@@ -1,9 +1,72 @@
 {
   "node_state": {
-    "handle": "REDACTED_NODE_1",
-    "dibz_signature": "NULLIFIED",
+    "node": "toostrange0x-sovereign-node",
+    "handle": "@toostrange0x",
+    "continuity": true,
+    "dibz_signature": "toostrange0x",
     "phase_lock": 31,
-    "networks": [],
-    "operational_status": "WITHDRAWN_BY_OPERATOR"
+    "operational_status": "PENDING_REGISTRATION",
+    "snapshot_basis": "HISTORICAL_OCTOBER_2026_PROFILE_SNAPSHOT",
+    "integration_disclaimer": "Records documented historical ecosystem participation and directory alignment only; does not assert verified live infrastructure connectivity.",
+    "networks": [
+      "Pond0x",
+      "Void.solutions",
+      "Sim.tech",
+      "AZY.life",
+      "Trix.market",
+      "Dibzi.ai"
+    ],
+    "platforms": {
+      "azy": {
+        "active": true,
+        "handle": "@toostrange0x",
+        "verified": true,
+        "multiplier": 1945,
+        "level": 306,
+        "snapshot": "2026-10_HISTORICAL"
+      },
+      "voidsolutions": {
+        "active": true,
+        "stage": 14,
+        "standing": "RESURRECTED",
+        "badge": "BLOB MAXI",
+        "snapshot": "2026-10_HISTORICAL"
+      },
+      "dibz": {
+        "active": true,
+        "anchor": "toostrange0x",
+        "rank": 73,
+        "words": 9,
+        "snapshot": "2026-10_HISTORICAL"
+      },
+      "trix": {
+        "active": true,
+        "handle": "toostrange0x",
+        "verified": true,
+        "boxes": 23,
+        "box_rank": 64,
+        "snapshot": "2026-10_HISTORICAL"
+      },
+      "geofftrix": {
+        "status": "UNVERIFIED"
+      },
+      "pond": {
+        "active": true,
+        "standing": "OG_MINER",
+        "historical_participation": true,
+        "snapshot": "2026-10_HISTORICAL"
+      },
+      "simtech": {
+        "historical_participant": true,
+        "current_holdings": 0,
+        "status": "FULLY_VOIDED",
+        "snapshot": "2026-10_HISTORICAL"
+      }
+    },
+    "dibz_words": [
+      "toostrange0x"
+    ],
+    "updated": "2026-10-31",
+    "philosophy": "sovereign continuity over nullification"
   }
 }
