@@ -1,5 +1,6 @@
 import json
 import time
+import os
 
 class ClaimGraphExporter:
     def __init__(self, sink_instance, oracle_instance, monitor_instance):
@@ -9,7 +10,8 @@ class ClaimGraphExporter:
 
     def export_portable_claim_graph_json(self) -> str:
         """
-        Dumps the append-only PROMOTED store into a clean, third-party verifiable JSON structure.
+        Extracts only records where status == 'PROMOTED', mapping the original 
+        source links side-by-side with resulting honesty and pressure shifts.
         """
         promoted_records = self.sink.fetch_promoted_records_only()
         graph_nodes = []
@@ -17,7 +19,7 @@ class ClaimGraphExporter:
         for record in promoted_records:
             url = record.get("source_url")
             
-            # Find the corresponding state outputs matching the original source url link
+            # Match snapshots using the unique source_url index point
             honesty_contribution = next((snap for snap in self.oracle.score_history_log if snap.get("triggering_source_url") == url), {})
             pressure_contribution = next((snap for snap in self.monitor.pressure_history_log if snap.get("triggering_source_url") == url), {})
 
@@ -26,8 +28,8 @@ class ClaimGraphExporter:
                 "motif": record.get("motif"),
                 "source_url": url,
                 "onchain_match": record.get("onchain_match"),
-                "honesty_delta": str(honesty_contribution.get("rolling_honesty_score_pct", 100.0)) + "%",
-                "pressure_ratio_after": str(pressure_contribution.get("calculated_pressure_ratio", 0.0))
+                "resulting_honesty_delta": str(honesty_contribution.get("rolling_honesty_score_pct", 100.0)) + "%",
+                "resulting_pressure_ratio": str(pressure_contribution.get("calculated_pressure_ratio", 0.0))
             }
             graph_nodes.append(node)
 
@@ -36,8 +38,10 @@ class ClaimGraphExporter:
             "graph_edges": graph_nodes
         }
         
-        # Write out to an append-only timestamped file configuration path to avoid overwriting prior work
-        filename = f"claim_graph_export_{int(time.time())}.json"
+        # Append-only file writing using a unique unix millisecond anchor to prevent overwriting history
+        unique_file_id = int(time.time() * 1000)
+        filename = f"claim_graph_export_{unique_file_id}.json"
+        
         with open(filename, "w") as f:
             json.dump(export_payload, f, indent=2)
 
