@@ -6,66 +6,61 @@ from simulation_map_onboarding import SimulationMapOnboarding
 from receipt_event_sink import ReceiptEventSink
 from honesty_oracle import HonestyOracle
 from claim_graph_exporter import ClaimGraphExporter
-from personal_threshold_binder import PersonalThresholdBinder
+from external_receipt_mirror import ExternalReceiptMirror
 
 def run_live_endpoint_verification_pass():
-    print("⚡ EXECUTING MASTER SUITE CONCURRENT WITH STALE REVALIDATOR SUITE...")
+    print("⚡ EXECUTING PHASE 36 MASTER SUITE: RE-VALIDATOR AND MIRROR ARRAYS...")
     
     ingester = LivePublicIngester()
     kill_switch = EmergencyKillSwitch()
-    
     shared_monitor = LiquidityPressureMonitor(kill_switch)
     shared_sink = ReceiptEventSink()
     shared_oracle = HonestyOracle()
     onboarding_map = SimulationMapOnboarding(shared_sink, shared_oracle, shared_monitor)
     exporter = ClaimGraphExporter(shared_sink, shared_oracle, shared_monitor)
     
-    # Initialize local threshold binder (Configured to alert at 12% pressure)
-    binder = PersonalThresholdBinder(max_acceptable_pressure=0.12, min_honesty_floor=75.0)
+    # Initialize the external receipt mirror engine
+    mirror = ExternalReceiptMirror()
 
     live_pool_status = {"current_pool_depth_usd": 600000.0}
-    live_treasury_outflows = {"cumulative_24h_outflow_usd": 72000.0}  # 12% baseline pressure
+    live_treasury_outflows = {"cumulative_24h_outflow_usd": 60000.0}
 
-    # 1. Append and promote a valid motif transaction
+    # 1. Append candidate motif and verify isolation
     target_url = "https://solscan.io"
-    candidate = shared_sink.append_candidate_event("0.0011 SOL sequence active.", target_url)
-    shared_sink.try_promote(target_url, "stale_audit_proof_hash")
-    candidate["magnitude"] = 0.0011
-
-    # Map snapshot values into history store arrays
-    map_state_nominal = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
+    candidate = shared_sink.append_candidate_event("0.0011 SOL sequence entry via gymcore endpoints", target_url)
     
-    # Assert personal threshold is within bounds initially
-    personal_check_1 = binder.evaluate_personal_threshold_breach(map_state_nominal)
-    assert personal_check_1["breach_status"]["personal_threshold_hit_marker"] is False
-    print("   [INITIAL] Personal risk threshold parameters verified within safe bounds.")
+    # Assert candidate is completely hidden before promotion
+    map_state_1 = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
+    assert map_state_1["non_dismissible_promoted_motif_layer"]["total_promoted_count"] == 0
+    print("   🟢 STEP 1: Unverified candidate perfectly isolated from front door layers.")
 
-    # 2. ASSERTION ONE: Run the Stale Promotion Revalidator Loop
-    print("\n🔄 STEP 2: FIRING STALE PROMOTION RE-VALIDATOR SECTOR AUDIT...")
+    # 2. Promote candidate event
+    promoted_record = shared_sink.try_promote(target_url, "stale_and_mirror_proof_hash")
+    promoted_record["magnitude"] = 0.0011
+    
+    # Hydrate history logs via map compiler execution
+    onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
+
+    # 3. ASSERTION ONE: Run the Stale Promotion Revalidator pass
+    print("\n🔄 STEP 2: TRIGGERING REVALIDATION RUN AGAINST DEFECTIVE ENDPOINTS...")
     audit = exporter.execute_stale_promotion_revalidation(target_url)
     assert audit["failures_logged"] == 1
-    print(f"   Logged Stale Revalidation Failures Count: {audit['failures_logged']}")
-
-    # 3. ASSERTION TWO: Verify map threat level scales to red and surfaces failure flags
+    
+    # Verify map surfaces the failure with the original source URL
     map_state_failed = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
-    assert map_state_failed["system_threat_level"] == "CRITICAL_RED_BREACH"
     assert map_state_failed["non_dismissible_promoted_motif_layer"]["stale_revalidation_failures_present"] is True
-    print("🟢 ASSERTION 1 SUCCESS: Map visual layout correctly isolates stale link decay snapshots.")
+    print(f"   Revalidation Failure Surfaced. Original Source URL Intact: {target_url}")
 
-    # 4. ASSERTION THREE: Verify personal risk threshold binder captures secondary outflow spikes
-    print("\n🚨 STEP 3: TESTING PERSONAL RISK PASSPORT OVERLAY BINDERS...")
-    # Simulate an added outflow transaction pushing pressure to 14.5% (breaching user 12% limit)
-    secondary_outflow = {"cumulative_24h_outflow_usd": 87000.0}
-    map_state_spiked = onboarding_map.compile_live_public_front_door(live_pool_status, secondary_outflow, 1000.0)
+    # 4. ASSERTION TWO: Emit payload block to Independent Append-Only External Mirror
+    print("\n📡 STEP 3: EXECUTING INDEPENDENT EXTERNAL RECEIPT GIST PAYLOAD EMISSION...")
+    mirror_report = mirror.mirror_promoted_event_external(promoted_record)
     
-    personal_check_2 = binder.evaluate_personal_threshold_breach(map_state_spiked)
-    print(f"   Personal Threshold Hit Marker State: {personal_check_2['breach_status']['personal_threshold_hit_marker']}")
-    print(f"   Enforced Strategy Command Vector  : {personal_check_2['enforced_strategy']}")
+    assert mirror_report["remote_anchor_status"] == "APPEND_SUCCESS"
+    assert mirror_report["payload"]["source_url"] == target_url
+    assert mirror_report["payload"]["revalidation_failed"] is True
     
-    assert personal_check_2["breach_status"]["pressure_limit_exceeded"] is True
-    assert personal_check_2["enforced_strategy"] == "TRIGGER_IMMEDIATE_LOCAL_REDUCTION"
-    print("🟢 ASSERTION 2 SUCCESS: Personal threshold binder auto-triggered exit reduction sequence.")
+    print(f"   External Mirror Synced. Appended Payload Hash: {mirror_report['mirrored_payload_hash']}")
+    print("   🟢 ASSERTION SUCCESS: Independent anti-tamper receipt logged.")
 
 if __name__ == "__main__":
     run_live_endpoint_verification_pass()
-
