@@ -1,3 +1,6 @@
+- Shipped the PROMOTED-only JSON claim-graph serialization module inside claim_graph_exporter.py.
+- Configured run_local_node.sh to intercept the --graph flag parameter, outputting portable, timestamped data files without overwriting history.
+
 - Created claim_graph_exporter.py to allow independent third-party verification of the PROMOTED event array metadata.
 - Integrated the --graph command-line parameter flag directly inside run_local_node.sh to export portable, source-linked JSON arrays cleanly.
 
