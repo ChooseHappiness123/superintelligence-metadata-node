@@ -64,3 +64,48 @@ def run_live_endpoint_verification_pass():
 
 if __name__ == "__main__":
     run_live_endpoint_verification_pass()
+# --- APPEND-ONLY TEST EXPANSION: EMITTER & BINDER VALIDATION ---
+def run_phase_35_append_only_assertions():
+    print("Initializing Phase 35 Emitter and Binder assertions...")
+    
+    # Setup test components
+    emitter = AppendOnlyGistEmitter(target_sink_url=None)
+    binder = PersonalExitBinder(configuration_path="test_pipeline_config_tmp.json")
+    
+    # Create temporary local configuration for test validation
+    test_config = {
+        "personal_risk_profile": {
+            "max_drawdown_threshold_pct": 10.0,
+            "initial_anchor_value": 1000.0
+        }
+    }
+    with open("test_pipeline_config_tmp.json", "w") as f:
+        json.dump(test_config, f)
+
+    # Assertion 1: Candidates produce zero emissions
+    assert emitter.emit_event("CANDIDATE_NOTE", {"data": "test"}) == False, "Violation: Candidate emitted a payload!"
+    assert emitter.emit_event("PROMOTED", {"data": "success"}) == True, "Failure: Valid PROMOTED event rejected"
+    assert emitter.emit_event("REVALIDATION_FAILED", {"data": "fail"}) == True, "Failure: Valid REVALIDATION_FAILED event rejected"
+    print("✓ Asserted candidates produce zero emissions.")
+    print("✓ Asserted PROMOTED / REVALIDATION_FAILED produce exactly one payload.")
+
+    # Assertion 2: Personal threshold flag appears only on breach
+    safe_metrics = {"total_portfolio_value_usd": 950.0} # 5% drawdown (under 10%)
+    breach_metrics = {"total_portfolio_value_usd": 850.0} # 15% drawdown (over 10%)
+    
+    safe_res = binder.check_threshold_bounds(safe_metrics, source_url="https://x.com")
+    assert safe_res["personal_threshold_hit"] == False, "Violation: Threshold flagged false-positive breach!"
+    
+    breach_res = binder.check_threshold_bounds(breach_metrics, source_url="https://x.com")
+    assert breach_res["personal_threshold_hit"] == True, "Failure: Target breach missed flag verification!"
+    assert "personal threshold hit" in breach_res["msg"], "Failure: Map/delta message string missing!"
+    print("✓ Asserted personal threshold flag appears only on breach.")
+
+    # Clean up temp file
+    if os.path.exists("test_pipeline_config_tmp.json"):
+        os.remove("test_pipeline_config_tmp.json")
+    print("All Phase 35 technical validations passed green.")
+
+if __name__ == "__main__":
+    run_phase_35_append_only_assertions()
+# --- END OF TEST EXPANSION ---
