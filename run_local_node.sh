@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# PHASE_36_ZAGGING_ACTIVE: FORKABLE NODE SETUP & CLAIM-GRAPH INTERROGATION LAYER
+# PHASE_36_ZAGGING_ACTIVE: FORKABLE NODE SETUP & CLAIM-GRAPH EXPORT LAYERS
 # ==============================================================================
 set -euo pipefail
 
@@ -14,7 +14,7 @@ elif [[ $# -gt 0 && "$1" == "--graph" ]]; then
 fi
 
 if [ "$RUN_GRAPH_EXPORT" = true ]; then
-    echo "📊 RE-VERIFICATION ACCESS TERMINAL: EXPORTING PORTABLE DECOUPLED MESH..."
+    echo "📊 RE-VERIFICATION EXPORT TERMINAL: SERIALIZING PORTABLE TRUTH CHANNELS..."
     python3 -c "
 from receipt_event_sink import ReceiptEventSink
 from honesty_oracle import HonestyOracle
@@ -28,13 +28,13 @@ monitor = LiquidityPressureMonitor(kill_switch)
 oracle = HonestyOracle()
 exporter = ClaimGraphExporter(sink, oracle, monitor)
 
-# Seed sample data for state verification checks
-candidate = sink.append_candidate_event('0.0011 SOL sequence active via @gymcore.', 'https://solscan.io')
-sink.try_promote('https://solscan.io', 'sample_hash')
-candidate['magnitude'] = 0.0011
+# Populate verifiable test baseline arrays
+candidate_1 = sink.append_candidate_event('AZY tracks 0.0011 SOL sequence', 'https://solscan.io')
+sink.try_promote('https://solscan.io', 'tx_hash_signature_alpha')
+candidate_1['magnitude'] = 0.0011
 
-monitor.evaluate_pool_pressure({'current_pool_depth_usd': 600000.0}, {'cumulative_24h_outflow_usd': 60000.0}, candidate)
-oracle.calculate_rolling_honesty_delta({'status': 'CLEAR'}, {'kill_switch_triggered': True}, [candidate])
+monitor.evaluate_pool_pressure({'current_pool_depth_usd': 600000.0}, {'cumulative_24h_outflow_usd': 60000.0}, candidate_1)
+oracle.calculate_rolling_honesty_delta({'status': 'CLEAR'}, {'kill_switch_triggered': True}, [candidate_1])
 
 print(exporter.export_portable_claim_graph_json())
 "
