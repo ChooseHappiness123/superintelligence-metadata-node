@@ -143,3 +143,95 @@ def monitor_onchain_flow_vectors(self, chain_event: dict) -> dict:
         chain_event["execution_action"] = "RETAIN_PASSIVE_MONITORING"
         
     return chain_event
+# --- APPEND-ONLY TRANSMISSION: PROMOTED & REVALIDATION_FAILED EVENT EMITTER ---
+import os
+import json
+import time
+import requests
+
+class AppendOnlyGistEmitter:
+    """
+    Handles additive-only event propagation for mesh validation.
+    Guarantees candidate modules emit zero payloads until promotion or validation failure.
+    """
+    def __init__(self, target_sink_url: str = None):
+        self.sink_url = target_sink_url or os.getenv("MESH_PUBLIC_GIST_SINK")
+        self.local_ledger_path = "phase_35_telemetry_ledger.jsonl"
+
+    def emit_event(self, event_type: str, payload: dict) -> bool:
+        # Candidates emit nothing: strict structural filter
+        if event_type not in ["PROMOTED", "REVALIDATION_FAILED"]:
+            return False
+
+        event_frame = {
+            "timestamp": int(time.time()),
+            "event": event_type,
+            "data": payload,
+            "network_anchor": "X1W2FsQ7CH394tNiR758h4kEetmfS2USN2eRCP9YK9W"
+        }
+
+        # Appends to local JSONL
+        try:
+            with open(self.local_ledger_path, "a") as ledger:
+                ledger.write(json.dumps(event_frame) + "\n")
+        except IOError:
+            pass
+
+        # Optional external POST
+        if self.sink_url:
+            try:
+                response = requests.post(self.sink_url, json=event_frame, timeout=5)
+                return response.status_code in [200, 201, 202]
+            except requests.RequestException:
+                return False
+        return True
+
+
+# --- SOFTENED PERSONAL EXIT-THRESHOLD BINDER ---
+class PersonalExitBinder:
+    """
+    Hooks existing state validation. Tracks thresholds without hard process termination.
+    Allows Map and --delta tools to capture status flags naturally.
+    """
+    def __init__(self, configuration_path: str = "pipeline_config.json"):
+        self.config_path = configuration_path
+        self.exit_triggered = False
+        
+    def check_threshold_bounds(self, current_balance_metrics: dict, source_url: str = "N/A") -> dict:
+        """
+        Appends log entry and returns evaluation status flag on breach. No process kill.
+        """
+        status_report = {
+            "personal_threshold_hit": False,
+            "source_url": source_url,
+            "msg": "Within operational bounds."
+        }
+        
+        try:
+            with open(self.config_path, "r") as config_file:
+                config = json.load(config_file)
+            
+            personal_bounds = config.get("personal_risk_profile", {})
+            max_allowed_loss_pct = personal_bounds.get("max_drawdown_threshold_pct", 100.0)
+            initial_anchor_value = personal_bounds.get("initial_anchor_value", 0.0)
+            
+            current_value = current_balance_metrics.get("total_portfolio_value_usd", 0.0)
+            
+            if initial_anchor_value > 0:
+                current_drawdown = ((initial_anchor_value - current_value) / initial_anchor_value) * 100
+                if current_drawdown >= max_allowed_loss_pct:
+                    self.exit_triggered = True
+                    status_report["personal_threshold_hit"] = True
+                    status_report["msg"] = f"personal threshold hit"
+                    
+                    # Append log entry on threshold breach
+                    try:
+                        with open("EMERGENCY_EXIT_LOG.txt", "a") as log:
+                            log.write(f"[{time.asctime()}] ALERT: personal threshold hit | Source: {source_url}\n")
+                    except IOError:
+                        pass
+        except (FileNotFoundError, json.JSONDecodeError):
+            pass 
+            
+        return status_report
+# --- END OF CODE MANIFEST ---
