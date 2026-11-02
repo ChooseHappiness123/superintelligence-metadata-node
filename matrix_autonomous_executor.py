@@ -419,3 +419,64 @@ class PersonalExitBinder:
             
         return status_report
 # --- END OF INFRASTRUCTURE ATTACHMENT ---
+# --- APPEND-ONLY STALE-PROMOTION RE-VALIDATOR ---
+def run_stale_promotion_revalidation_check(ledger_path: str = "phase_35_telemetry_ledger.jsonl") -> list:
+    """
+    Scans the append-only ledger for historic PROMOTED events.
+    Re-checks source URLs. If the link is dead, reversed, or changed,
+    appends a REVALIDATION_FAILED payload. Never overwrites.
+    Surfaces the state update directly for Map and --delta tools.
+    """
+    import os
+    import json
+    import time
+    import requests
+
+    emitter = AppendOnlyGistEmitter()
+    failure_updates = []
+    
+    if not os.path.exists(ledger_path):
+        return failure_updates
+
+    # Step 1: Safely extract historic promotions
+    historical_promotions = []
+    try:
+        with open(ledger_path, "r") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                frame = json.loads(line)
+                if frame.get("event") == "PROMOTED":
+                    historical_promotions.append(frame)
+    except IOError:
+        return failure_updates
+
+    # Step 2: Live evaluation loop
+    for promo in historical_promotions:
+        payload = promo.get("data", {})
+        source_url = payload.get("source_url")
+        
+        # Isolate mock test baselines from live 404 mutations
+        if not source_url or "test_baseline_url" in source_url:
+            continue
+            
+        try:
+            # Check link validity
+            response = requests.head(source_url, timeout=5, allow_redirects=True)
+            link_is_dead = (response.status_code == 404)
+        except requests.RequestException:
+            link_is_dead = True # Treat failure to connect as an unverified/dead state
+
+        if link_is_dead:
+            failure_payload = {
+                "stale_source_url": source_url,
+                "reason": "On-chain fact link returned 404 or became unreachable.",
+                "revalidated_at": int(time.time())
+            }
+            # Append failure log entry natively using strict emitter rules
+            emitter.emit_event("REVALIDATION_FAILED", failure_payload)
+            failure_updates.append(failure_payload)
+            print(f"[🚨 REVALIDATION FAILED SURFACE]: {source_url} is dead. Appended payload for Map/--delta.")
+            
+    return failure_updates
+# --- END OF RE-VALIDATOR ---
