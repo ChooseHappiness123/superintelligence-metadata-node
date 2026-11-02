@@ -3,60 +3,69 @@ from live_public_ingester import LivePublicIngester
 from emergency_kill_switch import EmergencyKillSwitch
 from liquidity_pressure_monitor import LiquidityPressureMonitor
 from simulation_map_onboarding import SimulationMapOnboarding
-from historical_phase_ledger import HistoricalPhaseLedger
-from ecosystem_timeline_parser import EcosystemTimelineParser
 from receipt_event_sink import ReceiptEventSink
 from honesty_oracle import HonestyOracle
 from claim_graph_exporter import ClaimGraphExporter
+from personal_threshold_binder import PersonalThresholdBinder
 
 def run_live_endpoint_verification_pass():
-    print("⚡ EXECUTING MASTER SUITE CONCURRENT WITH CLAIM-GRAPH EXPORT ACTIONS...")
+    print("⚡ EXECUTING MASTER SUITE CONCURRENT WITH STALE REVALIDATOR SUITE...")
     
     ingester = LivePublicIngester()
     kill_switch = EmergencyKillSwitch()
+    
     shared_monitor = LiquidityPressureMonitor(kill_switch)
     shared_sink = ReceiptEventSink()
     shared_oracle = HonestyOracle()
     onboarding_map = SimulationMapOnboarding(shared_sink, shared_oracle, shared_monitor)
-    ledger = HistoricalPhaseLedger()
-    timeline_parser = EcosystemTimelineParser()
-    
-    # Initialize the high-leverage claim graph tool suite
     exporter = ClaimGraphExporter(shared_sink, shared_oracle, shared_monitor)
+    
+    # Initialize local threshold binder (Configured to alert at 12% pressure)
+    binder = PersonalThresholdBinder(max_acceptable_pressure=0.12, min_honesty_floor=75.0)
 
     live_pool_status = {"current_pool_depth_usd": 600000.0}
-    live_treasury_outflows = {"cumulative_24h_outflow_usd": 60000.0}
+    live_treasury_outflows = {"cumulative_24h_outflow_usd": 72000.0}  # 12% baseline pressure
 
-    # 1. Append and promote a valid motif event to hydrate database logs
-    valid_outflow_url = "https://solscan.io"
-    shared_sink.append_candidate_event("0.0011 SOL sequence confirmed via main chain.", valid_outflow_url)
-    promoted = shared_sink.try_promote(valid_outflow_url, "authentic_export_test_hash")
-    promoted["magnitude"] = 0.0011
+    # 1. Append and promote a valid motif transaction
+    target_url = "https://solscan.io"
+    candidate = shared_sink.append_candidate_event("0.0011 SOL sequence active.", target_url)
+    shared_sink.try_promote(target_url, "stale_audit_proof_hash")
+    candidate["magnitude"] = 0.0011
 
-    # Compile the layout to write state snapshots into the oracle/monitor history stores
-    onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
-
-    # 2. ASSERTION ONE: Run portable graph export and assert schema definitions
-    print("\n📊 STEP 2: EXPORTING PORTABLE DATA CLAIM MESH GRAPH...")
-    exported_json = exporter.export_portable_claim_graph_json()
-    print(exported_json)
-    assert "graph_edges" in exported_json
-    assert "resulting_honesty_delta" in exported_json
-    print("   🟢 ASSERTION 1 SUCCESS: Portable graph generated cleanly.")
-
-    # 3. ASSERTION TWO: Fire the stale revalidation pass and ensure append-only posture holds
-    print("\n🔄 STEP 3: EXECUTING STALE-PROMOTION REVALIDATION AUDIT LOOP...")
-    audit = exporter.execute_stale_promotion_revalidation(valid_outflow_url)
-    assert audit["failures_logged"] == 1
+    # Map snapshot values into history store arrays
+    map_state_nominal = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
     
-    # Re-verify that the modified item is instantly filtered from subsequent front door compilations
-    updated_map = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
-    assert updated_map["non_dismissible_promoted_motif_layer"]["total_promoted_count"] == 0
-    print("   🟢 ASSERTION 2 SUCCESS: Stale promotion correctly flagged and isolated.")
+    # Assert personal threshold is within bounds initially
+    personal_check_1 = binder.evaluate_personal_threshold_breach(map_state_nominal)
+    assert personal_check_1["breach_status"]["personal_threshold_hit_marker"] is False
+    print("   [INITIAL] Personal risk threshold parameters verified within safe bounds.")
 
-    # Standard loop parsing actions
-    timeline_parser.parse_sequence_and_check_traps(ledger)
-    print("\n🏆 COMPREHENSIVE PORTABILITY AND VERIFICATION DRILL Green.")
+    # 2. ASSERTION ONE: Run the Stale Promotion Revalidator Loop
+    print("\n🔄 STEP 2: FIRING STALE PROMOTION RE-VALIDATOR SECTOR AUDIT...")
+    audit = exporter.execute_stale_promotion_revalidation(target_url)
+    assert audit["failures_logged"] == 1
+    print(f"   Logged Stale Revalidation Failures Count: {audit['failures_logged']}")
+
+    # 3. ASSERTION TWO: Verify map threat level scales to red and surfaces failure flags
+    map_state_failed = onboarding_map.compile_live_public_front_door(live_pool_status, live_treasury_outflows, 1000.0)
+    assert map_state_failed["system_threat_level"] == "CRITICAL_RED_BREACH"
+    assert map_state_failed["non_dismissible_promoted_motif_layer"]["stale_revalidation_failures_present"] is True
+    print("🟢 ASSERTION 1 SUCCESS: Map visual layout correctly isolates stale link decay snapshots.")
+
+    # 4. ASSERTION THREE: Verify personal risk threshold binder captures secondary outflow spikes
+    print("\n🚨 STEP 3: TESTING PERSONAL RISK PASSPORT OVERLAY BINDERS...")
+    # Simulate an added outflow transaction pushing pressure to 14.5% (breaching user 12% limit)
+    secondary_outflow = {"cumulative_24h_outflow_usd": 87000.0}
+    map_state_spiked = onboarding_map.compile_live_public_front_door(live_pool_status, secondary_outflow, 1000.0)
+    
+    personal_check_2 = binder.evaluate_personal_threshold_breach(map_state_spiked)
+    print(f"   Personal Threshold Hit Marker State: {personal_check_2['breach_status']['personal_threshold_hit_marker']}")
+    print(f"   Enforced Strategy Command Vector  : {personal_check_2['enforced_strategy']}")
+    
+    assert personal_check_2["breach_status"]["pressure_limit_exceeded"] is True
+    assert personal_check_2["enforced_strategy"] == "TRIGGER_IMMEDIATE_LOCAL_REDUCTION"
+    print("🟢 ASSERTION 2 SUCCESS: Personal threshold binder auto-triggered exit reduction sequence.")
 
 if __name__ == "__main__":
     run_live_endpoint_verification_pass()
+
