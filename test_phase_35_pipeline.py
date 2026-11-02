@@ -100,10 +100,39 @@ def run_phase_35_append_only_assertions():
     assert "personal threshold hit" in breach_res["msg"], "Failure: Map/delta message string missing!"
     print("✓ Asserted personal threshold flag appears only on breach.")
 
+        # Assertion 3: Re-validator appends exactly one failure receipt on dead link
+    test_ledger = "test_phase_35_telemetry_ledger_tmp.jsonl"
+    
+    # Pre-populate temp ledger with a fake successful promotion and a raw candidate
+    with open(test_ledger, "w") as f:
+        f.write(json.dumps({"event": "PROMOTED", "data": {"source_url": "https://httpstat.us"}}) + "\n")
+        f.write(json.dumps({"event": "CANDIDATE", "data": {"source_url": "https://httpstat.us"}}) + "\n")
+        
+    old_ledger = emitter.local_ledger_path
+    emitter.local_ledger_path = test_ledger  # temporarily redirect emitter path
+    
+    # Run the stale validation sweep
+    failures = run_stale_promotion_revalidation_check(ledger_path=test_ledger)
+    
+    # Assert exactly one failure was captured and candidate stream was untouched
+    assert len(failures) == 1, "Failure: Stale check did not log the 404 error!"
+    assert failures[0]["stale_source_url"] == "https://httpstat.us", "Failure: Target stale link mismatch!"
+    
+    # Verify the ledger file layout remains append-only
+    with open(test_ledger, "r") as f:
+        lines = f.readlines()
+    assert len(lines) == 3, "Failure: Ledger row was overwritten instead of appended!"
+    assert json.loads(lines[2])["event"] == "REVALIDATION_FAILED", "Failure: Appended receipt event mismatch!"
+    print("✓ Asserted stale URL produces exactly one failure receipt and zero side effects on candidates.")
+
     # Clean up temporary verification artifacts
+    emitter.local_ledger_path = old_ledger
     if os.path.exists("test_pipeline_config_tmp.json"):
         os.remove("test_pipeline_config_tmp.json")
+    if os.path.exists(test_ledger):
+        os.remove(test_ledger)
     print("All Phase 35 technical validations passed green.")
+
 
 if __name__ == "__main__":
     # 1. Run your original live endpoint verification pass
