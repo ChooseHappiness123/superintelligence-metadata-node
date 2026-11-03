@@ -33,3 +33,14 @@ class PersonalThresholdBinder:
             },
             "enforced_strategy": "TRIGGER_IMMEDIATE_LOCAL_REDUCTION" if personal_kill_activated else "MONITORING_WITHIN_BOUNDS"
         }
+
+    def format_delta_display(self, evaluation_report: dict) -> str:
+        """
+        Formats evaluation reports for Map and ./run_local_node.sh --delta views.
+        Returns clear plain-text strings with the source_url included on breach.
+        """
+        breach = evaluation_report.get("breach_status", {})
+        if breach.get("personal_threshold_hit_marker", False):
+            source_url = breach.get("triggering_source_url", "N/A")
+            return f"❌ [ALERT]: personal threshold hit | Source: {source_url}"
+        return "🍏 [OK]: Mesh operating within personal threshold constraints."
