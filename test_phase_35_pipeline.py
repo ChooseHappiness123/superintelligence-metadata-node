@@ -131,8 +131,35 @@ def run_phase_35_append_only_assertions():
         os.remove("test_pipeline_config_tmp.json")
     if os.path.exists(test_ledger):
         os.remove(test_ledger)
-    print("All Phase 35 technical validations passed green.")
+            os.remove(test_ledger)
 
+    # --- MAGMA ULTRALITENODE RE-VALIDATION ASSERTION ---
+    print("Testing UltraLiteNode Simulator Engine core paths...")
+    from ultralitenode_simulator import UltraLiteNodeSimulator
+    
+    magma_simulator = UltraLiteNodeSimulator(state_ledger="test_magma_ledger_tmp.jsonl")
+    
+    # 1. Assert full step onboarding setup functions perfectly
+    manifest = magma_simulator.execute_onboarding_sequence(lst_bond_amount=16.0)
+    assert len(manifest["step_1_keypair"]["public_key"]) == 44
+    assert manifest["step_2_chain_registration"]["registered_on_chain"] is True
+    assert manifest["env_configuration"]["SAMPLING_STRATEGY"] == "Block Stream Sampling (UltraLite)"
+    print("✓ Asserted hWonder Onboarding steps execute cleanly.")
+    
+    # 2. Assert bad validation streams trigger revalidation failure logs automatically
+    fail_sample = magma_simulator.process_block_stream_sampling(data_stream_quality="defective")
+    assert fail_sample["slashed_condition_detected"] is True
+    assert fail_sample["priority_tip_split_ratio"] == 0.50
+    
+    with open("test_magma_ledger_tmp.jsonl", "r") as test_f:
+        logged_lines = test_f.readlines()
+    assert json.loads(logged_lines[0])["event"] == "REVALIDATION_FAILED"
+    print("✓ Asserted bad block stream samples accurately log slashing failure vectors.")
+    
+    # Clean up local execution scratchpads
+    if os.path.exists("test_magma_ledger_tmp.jsonl"): os.remove("test_magma_ledger_tmp.jsonl")
+    if os.path.exists("ultralitenode_config.json"): os.remove("ultralitenode_config.json")
+    print("All Phase 35 technical validations passed green.")
 
 if __name__ == "__main__":
     # 1. Run your original live endpoint verification pass
